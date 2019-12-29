@@ -35,6 +35,7 @@
     "lit-html": "^1.0.0",
     "lit-scss-loader": "^1.0.0",
     "planet-clock-element": "git+https://github.com/babinux/planet-clock-element.git",
+    "poster-design-element": "git+https://github.com/babinux/poster-design-element.git",
     "sass-loader": "^8.0.0",
     "scss-loader": "0.0.1",
     "terser-webpack-plugin": "^2.3.1"

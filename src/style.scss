@@ -1,0 +1,18 @@
+form {
+	padding: 20px;;
+}
+#Form-Design-Settings{
+    background-color: grey;
+  }
+  .info-design-container{
+    display: block;
+    margin-block-end: 20px;
+  }
+  input[type=text]{
+      display: block;
+
+  }
+  .info-design-container>label{
+    margin-bottom: 10px;
+    display: block;
+  }
