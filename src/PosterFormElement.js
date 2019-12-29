@@ -58,7 +58,15 @@ export class PosterFormElement extends LitElement {
   <style>
   #mygrid{
     display:flex;
-    flex-direction: column-reverse;
+    /* flex-direction: row-reverse; */
+  }
+  form{
+    max-width:300px;
+  }
+  poster-design-element{
+    max-width: 400px;
+    order: 2;
+    margin-left: 20px;
   }
   </style>
 
