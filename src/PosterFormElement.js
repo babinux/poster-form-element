@@ -65,6 +65,8 @@ export class PosterFormElement extends LitElement {
   }
   poster-design-element{
     max-width: 400px;
+    max-height: 600px;
+
     order: 2;
     margin-left: 20px;
   }
