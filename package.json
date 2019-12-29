@@ -1,0 +1,97 @@
+{
+  "name": "poster-form-element",
+  "version": "0.0.0",
+  "description": "Webcomponent poster-form-element following open-wc recommendations",
+  "author": "poster-form-element",
+  "license": "MIT",
+  "main": "index.js",
+  "type": "module",
+  "module": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server  --mode=development  --node-resolve --open --watch --progress --info-verbosity verbose",
+    "XXXstart": "es-dev-server --app-index demo/index.html --node-resolve --open --watch",
+    "lint:eslint": "eslint --ext .js,.html . --ignore-path .gitignore",
+    "format:eslint": "eslint --ext .js,.html . --fix --ignore-path .gitignore",
+    "lint:prettier": "prettier \"**/*.js\" --check --ignore-path .gitignore",
+    "format:prettier": "prettier \"**/*.js\" --write --ignore-path .gitignore",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "format": "npm run format:eslint && npm run format:prettier",
+    "test": "karma start --coverage",
+    "test:watch": "karma start --auto-watch=true --single-run=false",
+    "test:update-snapshots": "karma start --update-snapshots",
+    "test:prune-snapshots": "karma start --prune-snapshots",
+    "test:bs": "karma start karma.bs.config.js --coverage",
+    "storybook": "start-storybook --node-resolve --watch --open",
+    "storybook:build": "build-storybook",
+    "start:build": "cd dist && es-dev-server --open",
+    "build": "webpack --mode=production"
+  },
+  "dependencies": {
+    "@open-wc/webpack-index-html-plugin": "^1.5.10",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.4.0",
+    "html-webpack-plugin": "^3.2.0",
+    "lit-element": "^2.0.1",
+    "lit-html": "^1.0.0",
+    "lit-scss-loader": "^1.0.0",
+    "planet-clock-element": "git+https://github.com/babinux/planet-clock-element.git",
+    "sass-loader": "^8.0.0",
+    "scss-loader": "0.0.1",
+    "terser-webpack-plugin": "^2.3.1"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-flow",
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": 8
+          }
+        }
+      ]
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-class-properties"
+      ]
+    ]
+  },
+  "devDependencies": {
+    "@open-wc/building-webpack": "^2.1.0",
+    "@open-wc/demoing-storybook": "^1.0.1",
+    "@open-wc/eslint-config": "^2.0.0",
+    "@open-wc/prettier-config": "^0.1.10",
+    "@open-wc/testing": "^2.0.0",
+    "@open-wc/testing-karma": "^3.0.0",
+    "@open-wc/testing-karma-bs": "^1.0.0",
+    "deepmerge": "^3.2.0",
+    "es-dev-server": "^1.5.0",
+    "eslint": "^6.1.0",
+    "extract-loader": "^2.0.1",
+    "husky": "^1.0.0",
+    "lint-staged": "^8.0.0",
+    "webpack": "^4.28.0",
+    "webpack-cli": "^3.3.4",
+    "webpack-dev-server": "^3.10.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@open-wc/eslint-config",
+      "eslint-config-prettier"
+    ]
+  },
+  "prettier": "@open-wc/prettier-config",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ]
+  }
+}

@@ -1,0 +1,55 @@
+import { Story, Preview, Meta, Props, html } from '@open-wc/demoing-storybook';
+
+import '../poster-form-element.js';
+
+<Meta 
+  title="PosterFormElement"
+  parameters={{
+    component: "poster-form-element",
+    options: { selectedPanel: "storybookjs/knobs/panel" }
+  }}
+/>
+
+# PosterFormElement
+
+A component for...
+
+## Features:
+
+- a
+- b
+- ...
+
+## How to use
+
+### Installation
+
+```bash
+yarn add poster-form-element
+```
+
+```js
+import 'poster-form-element/poster-form-element.js';
+```
+
+<Preview withToolbar>
+  <Story name="Simple">
+    {html`
+      <poster-form-element></poster-form-element>
+    `}
+  </Story>
+</Preview>
+
+## API
+
+<Props of="poster-form-element" />
+
+## Variations
+
+###### Custom Title
+
+<Story name="Custom Title">
+  {html`
+    <poster-form-element .title=${'Hello World'}></poster-form-element>
+  `}
+</Story>
