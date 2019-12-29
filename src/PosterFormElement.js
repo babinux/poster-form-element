@@ -26,6 +26,16 @@ const posterDarkOrbits = ['2', '4'];
 
 // NOT SURE I NEED THAT ============================
 
+// Settings : Human readable date
+const posterDateSettings = {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+};
+
+// Getter: URL and Params for use later
+const url = new URL(document.location);
+const posterParams = new URLSearchParams(url.search);
 
 
 
@@ -37,19 +47,92 @@ export class PosterFormElement extends LitElement {
 
   static get properties() {
     return {
-      title: {
-        type: String
+      posterDesign: {
+        type: String,
+        reflect: true
       },
-      counter: {
-        type: Number
+      posterDate: {
+        type: String,
+        reflect: true,
+        converter(value) {
+          return new Date(value);
+        }
       },
+      posterFormatedDate: {
+        type: String,
+        reflect: true,
+        converter() {
+          return new Date(this.posterDate).toLocaleDateString('en-EN', posterDateSettings);
+        }
+      },
+      posterPrint: {
+        type: String,
+        reflect: true
+      },
+      posterTitle: {
+        type: String,
+        reflect: true
+      },
+      posterSubtitle: {
+        type: String,
+        reflect: true
+      },
+      posterCoordinates: {
+        type: String,
+        reflect: true
+      },
+      posterLocation: {
+        type: String,
+        reflect: true
+      },
+      color: {
+        type: String,
+        reflect: true
+      }
     };
   }
 
   constructor() {
     super();
     this.title = 'Hey there';
+    // this.posterTitle = "yo man";
+    this.updatePropsFromUrl();
+
     this.counter = 5;
+  }
+
+  firstUpdated() {
+    this.updateUrlFromProps();
+  }
+
+  attributeChangedCallback(attr, oldVal, newVal) {
+    super.attributeChangedCallback(attr, oldVal, newVal);
+    this.updateUrlFromProps();
+  }
+
+  updatePropsFromUrl() {
+    this.posterPrint = posterParams.has("posterPrint") && posterParams.get("posterPrint") > 0 ? 1 : 0;
+    this.posterTitle = posterParams.has("posterTitle") ? posterParams.get("posterTitle") : 'Name Of Someone You Love';
+    this.posterSubtitle = posterParams.has("posterSubtitle") ? posterParams.get("posterSubtitle") : '';
+    this.posterLocation = posterParams.has("posterLocation") ? posterParams.get("posterLocation") : 'Amazing Place, World Country';
+    this.posterCoordinates = posterParams.has("posterCoordinates") ? posterParams.get("posterCoordinates") : '00.00000°N -000.00000°W';
+    this.posterDesign = posterParams.has("posterDesign") ? posterParams.get("posterDesign") : '1';
+    this.color = posterParams.has("color") ? posterParams.get("color") : posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white';
+    this.posterDate = posterParams.has("posterDate") ? new Date(isNaN(posterParams.get("posterDate")) ? posterParams.get("posterDate") : new Date()) : new Date();
+    this.posterFormatedDate = this.posterDate.toLocaleDateString('en-EN', posterDateSettings);
+  }
+
+  updateUrlFromProps() {
+    // posterParams.set("color", this.color);
+    posterParams.set("posterPrint", this.posterPrint);
+    posterParams.set("posterDesign", this.posterDesign);
+    posterParams.set("posterDate", `${this.posterDate.getFullYear()}-${this.posterDate.toLocaleString('default', { month: 'short' })}-${this.posterDate.getDate()}`);
+    posterParams.set("posterTitle", this.posterTitle);
+    // posterParams.set("posterSubtitle", this.posterSubtitle);
+    posterParams.set("posterLocation", this.posterLocation);
+    posterParams.set("posterCoordinates", this.posterCoordinates);
+
+    window.history.replaceState({}, "Updating poster Design", `?${posterParams.toString()}`)
   }
 
   render() {
@@ -74,7 +157,7 @@ export class PosterFormElement extends LitElement {
 
 <div id="mygrid">
 
-              <poster-design-element></poster-design-element>
+              <poster-design-element postertitle="${this.posterTitle}"></poster-design-element>
   
 
 
@@ -297,7 +380,7 @@ export class PosterFormElement extends LitElement {
 
 
         <input type="text" class="app-menu-text-field w-input" maxlength="256" name="Title" data-name="Title"
-          placeholder="Names, Special Moment or Occasion ..." id="Title" required="" />
+          placeholder="Names, Special Moment or Occasion ..." id="Title" required="true" value="${this.posterTitle}" />
 
       </div>
     </div>
