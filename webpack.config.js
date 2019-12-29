@@ -105,7 +105,6 @@ module.exports = {
             
           </head>
           <body>
-          yoyo webpack
               <poster-form-element></poster-form-element>
           </body>
         </html>

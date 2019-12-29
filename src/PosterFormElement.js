@@ -4,6 +4,30 @@ import {
   LitElement
 } from 'lit-element';
 
+// Style Import : Main/Current Component Style
+import componentStyle from './style.scss';
+
+// Element Import : Planet Clock, required for poster design (style included)
+import '../node_modules/planet-clock-element/index.js';
+
+
+
+
+// NOT SURE I NEED THAT ============================
+
+
+// List : All the designs for Poster
+const posterDesigns = ['', 'cosmic-latte', 'deep-space-blue', 'navy', 'cosmic-love', 'blackhole', 'supernova'];
+
+// Settings : color of the planets orbits based on the poster's background
+const posterDarkOrbits = ['2', '4'];
+
+
+// NOT SURE I NEED THAT ============================
+
+
+
+
 export class PosterFormElement extends LitElement {
   static get styles() {
     return css `
@@ -34,10 +58,6 @@ export class PosterFormElement extends LitElement {
     this.counter = 5;
   }
 
-  __increment() {
-    this.counter += 1;
-  }
-
   render() {
     return html `
 
@@ -59,43 +79,35 @@ export class PosterFormElement extends LitElement {
   }
   </style>
 
-    Coucou
-      <h2>${this.title} Nr. ${this.counter}!</h2>
-      <button @click=${this.__increment}>increment</button>
-
-
+   
 <form id="Form-Design-Settings" name="wf-form-Settings" data-name="Settings" method="get" class="form">
 	<div class="info-design-container">
-		<label for="mySubtitle" class="app-menu-label create-label">
-      
-    #1 Select Your
-			Design
+		<label for="mySubtitle" class="app-menu-label create-label"> 
+      #1 Select Your Design
 		</label>
 
 		<div class="div-block-53">
 			<div class="map-design-selector">
-				<div class="div-block-61">
-
-
-
 
 					<label class="theme-selection-radio w-radio">
 						<input type="radio" id="cosmic-latte" name="Design" value="cosmic-latte" data-name="Design"
-							checked="" class="design-radio-button w-radio-input" /><span for="cosmic-latte"
-							id="select-cosmic-latte"
-							class="design-radio-label radio-label-image-cosmic-latte w-form-label"><span
-								class="design-radio-label-text">Cosmic
-								Latte</span></span>
+                 class="design-radio-button w-radio-input" />
+              <span for="cosmic-latte" id="select-cosmic-latte" class="design-radio-label radio-label-image-cosmic-latte w-form-label">
+                <span class="design-radio-label-text">
+                  Cosmic Latte
+                </span>
+              </span>
 					</label>
 
 
 					<label class="theme-selection-radio w-radio">
 						<input type="radio" id="deep-space-blue" name="Design" value="deep-space-blue"
-							data-name="Design" class="design-radio-button w-radio-input" /><span for="deep-space-blue"
-							id="select-deep-space-blue"
-							class="design-radio-label radio-label-image-deep-space-blue w-form-label"><span
-								class="design-radio-label-text">Deep Space
-								Blue</span></span>
+              data-name="Design" class="design-radio-button w-radio-input" />
+              <span for="deep-space-blue"	id="select-deep-space-blue" class="design-radio-label radio-label-image-deep-space-blue w-form-label">
+                <span class="design-radio-label-text">
+                  Deep Space Blue
+                </span>
+              </span>
 					</label>
 
 
@@ -103,17 +115,21 @@ export class PosterFormElement extends LitElement {
 						<input type="radio" id="navy" name="Design" value="navy" data-name="Design"
 							class="design-radio-button w-radio-input" /><span for="navy" id="select-navy"
 							class="design-radio-label radio-label-image-navy w-form-label"><span
-								class="design-radio-label-text">Navy</span></span>
+                class="design-radio-label-text">
+                Navy
+              </span>
+            </span>
 					</label>
 
-				</div>
+				
 
 				<label class="theme-selection-radio w-radio">
 					<input type="radio" id="cosmic-love" name="Design" value="cosmic-love" data-name="Design"
 						class="design-radio-button w-radio-input" /><span for="cosmic-love" id="select-cosmic-love"
 						class="design-radio-label radio-label-image-cosmic-love w-form-label"><span
-							class="design-radio-label-text">Cosmic
-							Love</span></span>
+              class="design-radio-label-text">
+              Cosmic Love
+            </span></span>
 				</label>
 
 
@@ -139,14 +155,12 @@ export class PosterFormElement extends LitElement {
 
 
 		<label for="mySubtitle" class="app-menu-label create-label">
-      
-    #2
-			Location
+      #2 Location
 		</label>
 
 
-		<label for="Location-3" class="app-menu-label sub-label">Location / Place /
-			City
+		<label for="Location-3" class="app-menu-label sub-label">
+      Location / Place / City
 		</label>
 
 		<input type="text" class="app-menu-text-field w-input" maxlength="256" name="Location" data-name="Location"
@@ -299,7 +313,7 @@ export class PosterFormElement extends LitElement {
 
 				<label data-size="9x12" class="size-selection-radio w-radio">
 					<input type="radio" id="size-9x12-US" name="Size" value="size-9x12-US" data-name="Size" required=""
-						checked="" class="size-radio-select w-radio-input" /><span for="size-9x12-US"
+						 class="size-radio-select w-radio-input" /><span for="size-9x12-US"
 						class="size-radio-button-label label-8x10 w-form-label">9&quot; x
 						12&quot;<br /></span>
 				</label>
