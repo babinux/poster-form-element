@@ -7,10 +7,11 @@ import {
 // Style Import : Main/Current Component Style
 import componentStyle from './style.scss';
 
-// Element Import : Planet Clock, required for poster design (style included)
-import '../node_modules/planet-clock-element/index.js';
 
-import '../node_modules/poster-design-element/index.js';
+import 'poster-design-element';
+import '@vaadin/vaadin-date-picker';
+import '@vaadin/vaadin-text-field';
+import '@vaadin/vaadin-radio-button';
 
 
 
@@ -52,18 +53,19 @@ export class PosterFormElement extends LitElement {
         reflect: true
       },
       posterDate: {
-        type: String,
-        reflect: true,
-        converter(value) {
-          return new Date(value);
-        }
+        type: Object,
+        reflect: true
+        // ,
+        // converter(value) {
+        //   return new Date(value);
+        // }
       },
       posterFormatedDate: {
         type: String,
-        reflect: true,
-        converter() {
-          return new Date(this.posterDate).toLocaleDateString('en-EN', posterDateSettings);
-        }
+        // reflect: true,
+        // converter() {
+        //   return new Date(this.posterDate).toLocaleDateString('en-EN', posterDateSettings);
+        // }
       },
       posterPrint: {
         type: String,
@@ -84,17 +86,18 @@ export class PosterFormElement extends LitElement {
       posterLocation: {
         type: String,
         reflect: true
-      },
-      color: {
-        type: String,
-        reflect: true
       }
+      // ,
+      // color: {
+      //   type: String,
+      //   reflect: true
+      // }
     };
   }
 
   constructor() {
     super();
-    this.title = 'Hey there';
+    // this.title = 'Hey there';
     // this.posterTitle = "yo man";
     this.updatePropsFromUrl();
 
@@ -102,12 +105,25 @@ export class PosterFormElement extends LitElement {
   }
 
   firstUpdated() {
+// const floatingLabel = new MDCFloatingLabel(this.shadowRoot.querySelector('.mdc-floating-label'));
+// const lineRipple = new MDCLineRipple(this.shadowRoot.querySelector('.mdc-line-ripple'));
+// const textField = new MDCTextField(this.shadowRoot.querySelector('.mdc-text-field'));
+
     this.updateUrlFromProps();
   }
 
   attributeChangedCallback(attr, oldVal, newVal) {
+    // this.color = attr === "posterDesign" ? posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white' : false;
+    console.log('======');
+
+    console.log(attr);
+    console.log(this.color);
+    if (attr === "posterdesign") {
+      this.color = posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white';
+      console.log(this.color);
+    }
     super.attributeChangedCallback(attr, oldVal, newVal);
-    this.updateUrlFromProps();
+    // this.updateUrlFromProps();
   }
 
   updatePropsFromUrl() {
@@ -119,7 +135,7 @@ export class PosterFormElement extends LitElement {
     this.posterDesign = posterParams.has("posterDesign") ? posterParams.get("posterDesign") : '1';
     this.color = posterParams.has("color") ? posterParams.get("color") : posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white';
     this.posterDate = posterParams.has("posterDate") ? new Date(isNaN(posterParams.get("posterDate")) ? posterParams.get("posterDate") : new Date()) : new Date();
-    this.posterFormatedDate = this.posterDate.toLocaleDateString('en-EN', posterDateSettings);
+    this.posterFormatedDate = this.posterDate;
   }
 
   updateUrlFromProps() {
@@ -134,6 +150,42 @@ export class PosterFormElement extends LitElement {
 
     window.history.replaceState({}, "Updating poster Design", `?${posterParams.toString()}`)
   }
+
+  onInputChange(event) {
+    let input = event.target || event.srcElement;
+    console.log(input);
+    // console.log(caller.name);
+    // console.log(caller.id);
+    console.log(input.getAttribute('data-property-name'));
+    console.log(input.value);
+
+  
+
+    if (input.getAttribute('data-property-name') === "posterDate") {
+      console.log(input.getAttribute('data-property-name'));
+      console.log("+-----+");
+
+      this[input.getAttribute('data-property-name')] = new Date(input.value);
+      console.log(this[input.getAttribute('data-property-name')]);
+      console.log(this.posterDate);
+      console.log("+++++");
+
+      console.log(this.posterFormatedDate);
+
+
+
+      this.posterFormatedDate = this.posterDate;
+      console.log(this.posterFormatedDate);
+
+
+    } else {
+      this[input.getAttribute('data-property-name')] = input.value;
+    }
+  }
+
+  // get inputEl() {
+  //   return this.shadowRoot.getElementById('name');
+  // }
 
   render() {
     return html `
@@ -157,58 +209,80 @@ export class PosterFormElement extends LitElement {
 
 <div id="mygrid">
 
-              <poster-design-element postertitle="${this.posterTitle}"></poster-design-element>
-  
 
 
+  <poster-design-element postertitle="${this.posterTitle}" postersubtitle="${this.posterSubtitle}"
+    posterlocation="${this.posterLocation}" postercoordinates="${this.posterCoordinates}"
+    posterdesign="${this.posterDesign}" color="${this.color}" posterdate="${this.posterDate}"
+    posterformateddate="${this.posterFormatedDate}">
+  </poster-design-element>
 
-  <form id="Form-Design-Settings" name="wf-form-Settings" data-name="Settings" method="get" class="form">
+
+  <form id="Form-Design-Settings" name="wf-form-Settings" data-property-name="Settings" method="get" class="form">
     <div class="info-design-container">
-      <label for="mySubtitle" class="app-menu-label create-label"> 
+      <label for="mySubtitle" class="">
         #1 Select Your Design
       </label>
 
       <div class="div-block-53">
         <div class="map-design-selector">
 
-            <label class="theme-selection-radio w-radio">
-              <input type="radio" id="cosmic-latte" name="Design" value="cosmic-latte" data-name="Design"
-                  class="design-radio-button w-radio-input" />
-                <span for="cosmic-latte" id="select-cosmic-latte" class="design-radio-label radio-label-image-cosmic-latte w-form-label">
-                  <span class="design-radio-label-text">
-                    Cosmic Latte
-                  </span>
-                </span>
-            </label>
+          <vaadin-radio-group label="Poster Design" >
+            <vaadin-radio-button id="radio--cosmic-latte" value="1" data-property-name="posterDesign" @change="${this.onInputChange}" >Cosmic Latte</vaadin-radio-button>
+            <vaadin-radio-button id="radio--deep-space-blue" value="2" data-property-name="posterDesign" @input="${this.onInputChange}">Deep Space Blue</vaadin-radio-button>
+            <vaadin-radio-button id="radio--navy" value="3" data-property-name="posterDesign" @input="${this.onInputChange}" >Navy</vaadin-radio-button>
+            <vaadin-radio-button id="radio--cosmic-love" value="4" data-property-name="posterDesign" @input="${this.onInputChange}" >Cosmic Love</vaadin-radio-button>
+            <vaadin-radio-button id="radio--blackhole" value="5" data-property-name="posterDesign" @input="${this.onInputChange}" >Blackhole</vaadin-radio-button>
+            <vaadin-radio-button id="radio--supernova" value="6" data-property-name="posterDesign" @input="${this.onInputChange}" >Supernova</vaadin-radio-button>
+          </vaadin-radio-group>
 
-
-            <label class="theme-selection-radio w-radio">
-              <input type="radio" id="deep-space-blue" name="Design" value="deep-space-blue"
-                data-name="Design" class="design-radio-button w-radio-input" />
-                <span for="deep-space-blue"	id="select-deep-space-blue" class="design-radio-label radio-label-image-deep-space-blue w-form-label">
-                  <span class="design-radio-label-text">
-                    Deep Space Blue
-                  </span>
-                </span>
-            </label>
-
-
-            <label class="theme-selection-radio w-radio">
-              <input type="radio" id="navy" name="Design" value="navy" data-name="Design"
-                class="design-radio-button w-radio-input" /><span for="navy" id="select-navy"
-                class="design-radio-label radio-label-image-navy w-form-label"><span
-                  class="design-radio-label-text">
-                  Navy
-                </span>
-              </span>
-            </label>
-
-          
+          <br><hr>
 
           <label class="theme-selection-radio w-radio">
-            <input type="radio" id="cosmic-love" name="Design" value="cosmic-love" data-name="Design"
-              class="design-radio-button w-radio-input" /><span for="cosmic-love" id="select-cosmic-love"
-              class="design-radio-label radio-label-image-cosmic-love w-form-label"><span
+            <input type="radio" id="cosmic-latte" 
+            value="1" 
+            @input="${this.onInputChange}" 
+            name="Design"
+              data-property-name="posterDesign" class="design-radio-button w-radio-input" />
+            <span for="cosmic-latte" id="select-cosmic-latte"
+              class="design-radio-label radio-label-image-cosmic-latte w-form-label">
+              <span class="design-radio-label-text">
+                Cosmic Latte
+              </span>
+            </span>
+          </label>
+
+
+          <label class="theme-selection-radio w-radio">
+            <!-- <input type="radio" id="deep-space-blue" name="Design" value="deep-space-blue"
+                data-property-name="Design" class="design-radio-button w-radio-input" /> -->
+            <input type="radio" id="deep-space-blue" value="2" @input="${this.onInputChange}" name="Design"
+              data-property-name="posterDesign" class="design-radio-button w-radio-input" />
+            <span for="deep-space-blue" id="select-deep-space-blue"
+              class="design-radio-label radio-label-image-deep-space-blue w-form-label">
+              <span class="design-radio-label-text">
+                Deep Space Blue
+              </span>
+            </span>
+          </label>
+
+
+          <label class="theme-selection-radio w-radio">
+            <input type="radio" id="navy" value="3" @input="${this.onInputChange}" name="Design"
+              data-property-name="posterDesign" class="design-radio-button w-radio-input" /><span for="navy"
+              id="select-navy" class="design-radio-label radio-label-image-navy w-form-label"><span
+                class="design-radio-label-text">
+                Navy
+              </span>
+            </span>
+          </label>
+
+
+
+          <label class="theme-selection-radio w-radio">
+            <input type="radio" id="cosmic-love" value="4" @input="${this.onInputChange}" name="Design"
+              data-property-name="posterDesign" class="design-radio-button w-radio-input" /><span for="cosmic-love"
+              id="select-cosmic-love" class="design-radio-label radio-label-image-cosmic-love w-form-label"><span
                 class="design-radio-label-text">
                 Cosmic Love
               </span></span>
@@ -216,17 +290,19 @@ export class PosterFormElement extends LitElement {
 
 
           <label class="theme-selection-radio w-radio">
-            <input type="radio" id="blackhole" name="Design" value="blackhole" data-name="Design"
-              class="design-radio-button w-radio-input" /><span for="blackhole" id="select-blackhole"
-              class="design-radio-label radio-label-image-blackhole w-form-label"><span
+            <input type="radio" id="blackhole" value="5" @input="${this.onInputChange}" name="Design"
+              data-property-name="posterDesign" class="design-radio-button w-radio-input" /><span for="blackhole"
+              id="select-blackhole" class="design-radio-label radio-label-image-blackhole w-form-label"><span
                 class="design-radio-label-text">Blackhole</span></span>
           </label>
 
 
           <label class="theme-selection-radio w-radio">
-            <input type="radio" id="supernova" name="Design" value="supernova" data-name="Design"
-              class="design-radio-button w-radio-input" /><span for="supernova" id="select-supernova"
-              class="design-radio-label radio-label-image-supernova w-form-label"><span
+            <input type="radio" id="supernova" name="Design" value="6" @input="${this.onInputChange}" name="Design"
+              data-property-name="posterDesign" class="design-radio-button w-radio-input" />
+              <span for="supernova"
+              id="select-supernova" class="design-radio-label radio-label-image-supernova w-form-label">
+              <span
                 class="design-radio-label-text">Supernova</span></span>
           </label>
 
@@ -234,9 +310,9 @@ export class PosterFormElement extends LitElement {
       </div>
     </div>
     <div class="info-design-container">
+<!-- 
 
-
-      <label for="mySubtitle" class="app-menu-label create-label">
+      <label for="mySubtitle" class="">
         #2 Location
       </label>
 
@@ -245,19 +321,25 @@ export class PosterFormElement extends LitElement {
         Location / Place / City
       </label>
 
-      <input type="text" class="app-menu-text-field w-input" maxlength="256" name="Location" data-name="Location"
-        placeholder="Choose Location" id="Location" required="" />
+      <input value="${this.posterLocation}" @input="${this.onInputChange}" type="text" class="" name="posterLocation"
+        data-property-name="posterLocation" placeholder="Choose Location" id="posterLocation" required="" /> -->
+
+
+        <vaadin-text-field @input="${this.onInputChange}" label="#2 Location"
+          value="${this.posterLocation}" data-property-name="posterLocation"
+          placeholder="Location">
+        </vaadin-text-field>
+
     </div>
     <div class="info-design-container">
 
-      <label for="mySubtitle" class="app-menu-label create-label">
-        
-      #3 Date
-      </label>
+      <vaadin-date-picker @change="${this.onInputChange}" data-property-name="posterDate" label="#3 Date"
+        placeholder="Pick a date" value="${this.posterDate}">
+      </vaadin-date-picker>
 
-      <div class="div-block-42">
 
-        <div class="div-block-47"><select id="Day" name="Day" data-name="Day" required=""
+      <!-- 
+        <div class="div-block-47"><select id="Day" name="Day" data-property-name="Day" required=""
             class="field-day app-menu-text-field w-select">
             <option value="1">1</option>
             <option value="2">2</option>
@@ -290,7 +372,7 @@ export class PosterFormElement extends LitElement {
             <option value="29">29</option>
             <option value="30">30</option>
             <option value="31">31</option>
-          </select><select id="Month" name="Month" data-name="Month" required=""
+          </select><select id="Month" name="Month" data-property-name="Month" required=""
             class="app-menu-text-field field-month w-select">
             <option value="0">January</option>
             <option value="1">February</option>
@@ -304,7 +386,7 @@ export class PosterFormElement extends LitElement {
             <option value="9">October</option>
             <option value="10">November</option>
             <option value="11">December</option>
-          </select><select id="Year" name="Year" data-name="Year" required=""
+          </select><select id="Year" name="Year" data-property-name="Year" required=""
             class="field-year app-menu-text-field w-select">
             <option value="1970">1970</option>
             <option value="1971">1971</option>
@@ -360,33 +442,40 @@ export class PosterFormElement extends LitElement {
             <option value="2021">2021</option>
             <option value="2022">2022</option>
           </select></div>
-      </div>
+      </div> -->
 
 
     </div>
+
+
+
+
     <div class="info-design-container">
       <div class="map-text-design">
 
-        <label for="mySubtitle" class="app-menu-label create-label">
+        <!-- <label for="posterTitle" class="">
           #4
           Customize the text of your moment
-        </label>
-
-
-        <label for="Title-3" class="app-menu-label">Name of the person,
-          note or message
-        </label>
+        </label> -->
 
 
 
-        <input type="text" class="app-menu-text-field w-input" maxlength="256" name="Title" data-name="Title"
-          placeholder="Names, Special Moment or Occasion ..." id="Title" required="true" value="${this.posterTitle}" />
+
+        <!-- <input id="posterTitle" value="${this.posterTitle}" @input="${this.onInputChange}" type="text" name="posterTitle" data-property-name="posterTitle"
+          placeholder="Names, Special Moment or Occasion ..." id="Title" required="true"  /> -->
+
+        <vaadin-text-field @input="${this.onInputChange}" label="#4 Customize the text of your moment"
+          value="${this.posterTitle}" data-property-name="posterTitle"
+          placeholder="Names, Special Moment or Occasion ...">
+        </vaadin-text-field>
+
+
 
       </div>
     </div>
     <div class="info-design-container">
 
-      <label for="mySubtitle" class="app-menu-label create-label">
+      <label for="mySubtitle" class="">
         #5 Select Size
       </label>
 
@@ -394,7 +483,7 @@ export class PosterFormElement extends LitElement {
         <div class="div-block-63">
 
           <label data-size="9x12" class="size-selection-radio w-radio">
-            <input type="radio" id="size-9x12-US" name="Size" value="size-9x12-US" data-name="Size" required=""
+            <input type="radio" id="size-9x12-US" name="Size" value="size-9x12-US" data-property-name="Size" required=""
               class="size-radio-select w-radio-input" /><span for="size-9x12-US"
               class="size-radio-button-label label-8x10 w-form-label">9&quot; x
               12&quot;<br /></span>
@@ -402,7 +491,7 @@ export class PosterFormElement extends LitElement {
 
 
           <label data-size="12x16" class="size-selection-radio w-radio">
-            <input type="radio" id="size-12x16-US" name="Size" value="size-12x16-US" data-name="Size"
+            <input type="radio" id="size-12x16-US" name="Size" value="size-12x16-US" data-property-name="Size"
               required="" class="size-radio-select w-radio-input" /><span for="size-12x16-US"
               class="size-radio-button-label label-12x16 w-form-label">12&quot; x
               16&quot;<br /></span>
@@ -410,7 +499,7 @@ export class PosterFormElement extends LitElement {
 
 
           <label data-size="18x24" class="size-selection-radio w-radio">
-            <input type="radio" id="size-18x24-US" name="Size" value="size-18x24-US" data-name="Size"
+            <input type="radio" id="size-18x24-US" name="Size" value="size-18x24-US" data-property-name="Size"
               class="size-radio-select w-radio-input" /><span for="size-18x24-US"
               class="size-radio-button-label label-18x24 w-form-label">18&quot; x
               24&quot;<br /></span>
@@ -422,7 +511,7 @@ export class PosterFormElement extends LitElement {
 
   </form>
 
-  </div>
+</div>
 
     `;
   }

@@ -102,7 +102,7 @@ module.exports = {
       template: () => `
         <html>
           <head>
-            
+            <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed|KoHo|Kodchasan:400,500,600|Nova+Slim|Rationale|Satisfy&display=swap" rel="stylesheet">
           </head>
           <body>
               <poster-form-element></poster-form-element>
