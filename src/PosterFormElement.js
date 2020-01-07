@@ -15,17 +15,16 @@ import '@vaadin/vaadin-radio-button';
 
 
 
+
 // NOT SURE I NEED THAT ============================
-
-
+// 
 // List : All the designs for Poster
 const posterDesigns = ['', 'cosmic-latte', 'deep-space-blue', 'navy', 'cosmic-love', 'blackhole', 'supernova'];
 
 // Settings : color of the planets orbits based on the poster's background
 const posterDarkOrbits = ['2', '4'];
-
-
 // NOT SURE I NEED THAT ============================
+
 
 // Settings : Human readable date
 const posterDateSettings = {
@@ -33,10 +32,6 @@ const posterDateSettings = {
   month: 'long',
   day: 'numeric'
 };
-
-// Getter: URL and Params for use later
-const url = new URL(document.location);
-const posterParams = new URLSearchParams(url.search);
 
 
 
@@ -95,61 +90,104 @@ export class PosterFormElement extends LitElement {
     };
   }
 
+  // connectedCallback() {
+  //   super.connectedCallback();
+  //   document.addEventListener('locationchange', function () {
+  //     console.log('location changed!');
+  //     this.updatePropsFromUrl();
+
+  //   });
+
+  // }
+
+  // disconnectedCallback() {
+  //   document.removeEventListener('readystatechange');
+  //   super.disconnectedCallback();
+  // }
+
+
   constructor() {
     super();
     // this.title = 'Hey there';
     // this.posterTitle = "yo man";
+
+    // Getter: URL and Params for use later
+    this.url = new URL(document.location);
+    this.posterParams = new URLSearchParams(this.url.search);
+
+    this.observeMe = new Proxy(this.posterParams, this.handlerMe);
+
+
     this.updatePropsFromUrl();
 
     this.counter = 5;
   }
 
+
+  handlerMe() {
+    alert('asdasd');
+  }
+
+
   firstUpdated() {
-// const floatingLabel = new MDCFloatingLabel(this.shadowRoot.querySelector('.mdc-floating-label'));
-// const lineRipple = new MDCLineRipple(this.shadowRoot.querySelector('.mdc-line-ripple'));
-// const textField = new MDCTextField(this.shadowRoot.querySelector('.mdc-text-field'));
 
     this.updateUrlFromProps();
   }
 
   attributeChangedCallback(attr, oldVal, newVal) {
     // this.color = attr === "posterDesign" ? posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white' : false;
+
+
     console.log('======');
 
-    console.log(attr);
-    console.log(this.color);
+    // console.log(attr);
+    // console.log(this.color);
     if (attr === "posterdesign") {
       this.color = posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white';
-      console.log(this.color);
+      // console.log(this.color);
     }
+
+    this.updateUrlFromProps();
+
+    // console.log(window.onhashchange);
+
     super.attributeChangedCallback(attr, oldVal, newVal);
-    // this.updateUrlFromProps();
   }
 
   updatePropsFromUrl() {
-    this.posterPrint = posterParams.has("posterPrint") && posterParams.get("posterPrint") > 0 ? 1 : 0;
-    this.posterTitle = posterParams.has("posterTitle") ? posterParams.get("posterTitle") : 'Name Of Someone You Love';
-    this.posterSubtitle = posterParams.has("posterSubtitle") ? posterParams.get("posterSubtitle") : '';
-    this.posterLocation = posterParams.has("posterLocation") ? posterParams.get("posterLocation") : 'Amazing Place, World Country';
-    this.posterCoordinates = posterParams.has("posterCoordinates") ? posterParams.get("posterCoordinates") : '00.00000°N -000.00000°W';
-    this.posterDesign = posterParams.has("posterDesign") ? posterParams.get("posterDesign") : '1';
-    this.color = posterParams.has("color") ? posterParams.get("color") : posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white';
-    this.posterDate = posterParams.has("posterDate") ? new Date(isNaN(posterParams.get("posterDate")) ? posterParams.get("posterDate") : new Date()) : new Date();
+    this.url = new URL(document.location);
+    this.posterParams = new URLSearchParams(this.url.search);
+
+    this.posterPrint = this.posterParams.has("posterPrint") && this.posterParams.get("posterPrint") > 0 ? 1 : 0;
+    this.posterTitle = this.posterParams.has("posterTitle") ? this.posterParams.get("posterTitle") : 'Name Of Someone You Love';
+    this.posterSubtitle = this.posterParams.has("posterSubtitle") ? this.posterParams.get("posterSubtitle") : '';
+    this.posterLocation = this.posterParams.has("posterLocation") ? this.posterParams.get("posterLocation") : 'Amazing Place, World Country';
+    this.posterCoordinates = this.posterParams.has("posterCoordinates") ? this.posterParams.get("posterCoordinates") : '00.00000°N -000.00000°W';
+    this.posterDesign = this.posterParams.has("posterDesign") ? this.posterParams.get("posterDesign") : '1';
+    this.color = this.posterParams.has("color") ? this.posterParams.get("color") : posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white';
+    this.posterDate = this.posterParams.has("posterDate") ? new Date(isNaN(this.posterParams.get("posterDate")) ? this.posterParams.get("posterDate") : new Date()) : new Date();
     this.posterFormatedDate = this.posterDate;
   }
 
   updateUrlFromProps() {
-    // posterParams.set("color", this.color);
-    posterParams.set("posterPrint", this.posterPrint);
-    posterParams.set("posterDesign", this.posterDesign);
-    posterParams.set("posterDate", `${this.posterDate.getFullYear()}-${this.posterDate.toLocaleString('default', { month: 'short' })}-${this.posterDate.getDate()}`);
-    posterParams.set("posterTitle", this.posterTitle);
-    // posterParams.set("posterSubtitle", this.posterSubtitle);
-    posterParams.set("posterLocation", this.posterLocation);
-    posterParams.set("posterCoordinates", this.posterCoordinates);
+    this.url = new URL(document.location);
+    this.posterParams = new URLSearchParams(this.url.search);
 
-    window.history.replaceState({}, "Updating poster Design", `?${posterParams.toString()}`)
+    // this.posterParams.set("color", this.color);
+    this.posterParams.set("posterSize", "9x12");
+
+    this.posterParams.set("posterPrint", this.posterPrint);
+    this.posterParams.set("posterDesign", this.posterDesign);
+    this.posterParams.set("posterDate", `${this.posterDate.getFullYear()}-${this.posterDate.toLocaleString('default', { month: 'short' })}-${this.posterDate.getDate()}`);
+    this.posterParams.set("posterTitle", this.posterTitle);
+    // this.posterParams.set("posterSubtitle", this.posterSubtitle);
+    this.posterParams.set("posterLocation", this.posterLocation);
+    this.posterParams.set("posterCoordinates", this.posterCoordinates);
+
+    window.history.replaceState({}, "Updating poster Design", `?${this.posterParams.toString()}`)
   }
+
+
 
   onInputChange(event) {
     let input = event.target || event.srcElement;
@@ -159,7 +197,7 @@ export class PosterFormElement extends LitElement {
     console.log(input.getAttribute('data-property-name'));
     console.log(input.value);
 
-  
+
 
     if (input.getAttribute('data-property-name') === "posterDate") {
       console.log(input.getAttribute('data-property-name'));
@@ -211,9 +249,14 @@ export class PosterFormElement extends LitElement {
 
 
 
-  <poster-design-element postertitle="${this.posterTitle}" postersubtitle="${this.posterSubtitle}"
-    posterlocation="${this.posterLocation}" postercoordinates="${this.posterCoordinates}"
-    posterdesign="${this.posterDesign}" color="${this.color}" posterdate="${this.posterDate}"
+  <poster-design-element 
+    postertitle="${this.posterTitle}" 
+    postersubtitle="${this.posterSubtitle}"
+    posterlocation="${this.posterLocation}" 
+    postercoordinates="${this.posterCoordinates}"
+    posterdesign="${this.posterDesign}" 
+    color="${this.color}" 
+    posterdate="${this.posterDate}"
     posterformateddate="${this.posterFormatedDate}">
   </poster-design-element>
 
@@ -240,10 +283,11 @@ export class PosterFormElement extends LitElement {
 
           <label class="theme-selection-radio w-radio">
             <input type="radio" id="cosmic-latte" 
-            value="1" 
-            @input="${this.onInputChange}" 
-            name="Design"
-              data-property-name="posterDesign" class="design-radio-button w-radio-input" />
+              value="1" 
+              @input="${this.onInputChange}" 
+              name="Design"
+              data-property-name="posterDesign" 
+              class="design-radio-button w-radio-input" />
             <span for="cosmic-latte" id="select-cosmic-latte"
               class="design-radio-label radio-label-image-cosmic-latte w-form-label">
               <span class="design-radio-label-text">
@@ -298,10 +342,14 @@ export class PosterFormElement extends LitElement {
 
 
           <label class="theme-selection-radio w-radio">
-            <input type="radio" id="supernova" name="Design" value="6" @input="${this.onInputChange}" name="Design"
-              data-property-name="posterDesign" class="design-radio-button w-radio-input" />
-              <span for="supernova"
-              id="select-supernova" class="design-radio-label radio-label-image-supernova w-form-label">
+            <input type="radio" id="supernova" 
+            name="Design" value="6" @input="${this.onInputChange}" 
+              data-property-name="posterDesign" 
+              class="design-radio-button w-radio-input" />
+              <span 
+                for="supernova"
+                id="select-supernova" 
+                class="design-radio-label radio-label-image-supernova w-form-label">
               <span
                 class="design-radio-label-text">Supernova</span></span>
           </label>
@@ -465,6 +513,11 @@ export class PosterFormElement extends LitElement {
           placeholder="Names, Special Moment or Occasion ..." id="Title" required="true"  /> -->
 
         <vaadin-text-field @input="${this.onInputChange}" label="#4 Customize the text of your moment"
+          value="${this.posterTitle}" data-property-name="posterTitle"
+          placeholder="Names, Special Moment or Occasion ...">
+        </vaadin-text-field>
+
+         <vaadin-text-field @input="${this.onInputChange}" label="#4 Customize the text of your moment"
           value="${this.posterTitle}" data-property-name="posterTitle"
           placeholder="Names, Special Moment or Occasion ...">
         </vaadin-text-field>
