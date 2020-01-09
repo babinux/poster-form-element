@@ -168,6 +168,7 @@ export class PosterFormElement extends LitElement {
     // eslint-disable-next-line no-restricted-globals
     this.posterDate = this.posterParams.has('posterDate')
       ? new Date(
+          // eslint-disable-next-line no-restricted-globals
           isNaN(this.posterParams.get('posterDate'))
             ? this.posterParams.get('posterDate')
             : new Date(),
@@ -265,8 +266,7 @@ export class PosterFormElement extends LitElement {
           id="Form-Design-Settings"
           name="wf-form-Settings"
           data-property_name="Settings"
-          method="get"
-          class="form"
+          class="posterFormContainer"
         >
           <div class="info-design-container">
             <label for="mySubtitle" class="">
@@ -281,47 +281,53 @@ export class PosterFormElement extends LitElement {
                     value="1"
                     data-property_name="posterDesign"
                     @change="${this.onInputChange}"
-                    >Cosmic Latte</vaadin-radio-button
                   >
+                    Cosmic Latte
+                  </vaadin-radio-button>
                   <vaadin-radio-button
                     id="radio--deep-space-blue"
                     value="2"
                     data-property_name="posterDesign"
                     @input="${this.onInputChange}"
-                    >Deep Space Blue</vaadin-radio-button
                   >
+                    Deep Space Blue
+                  </vaadin-radio-button>
                   <vaadin-radio-button
                     id="radio--navy"
                     value="3"
                     data-property_name="posterDesign"
                     @input="${this.onInputChange}"
-                    >Navy</vaadin-radio-button
                   >
+                    Navy
+                  </vaadin-radio-button>
                   <vaadin-radio-button
                     id="radio--cosmic-love"
                     value="4"
                     data-property_name="posterDesign"
                     @input="${this.onInputChange}"
-                    >Cosmic Love</vaadin-radio-button
                   >
+                    Cosmic Love
+                  </vaadin-radio-button>
                   <vaadin-radio-button
                     id="radio--blackhole"
                     value="5"
                     data-property_name="posterDesign"
                     @input="${this.onInputChange}"
-                    >Blackhole</vaadin-radio-button
                   >
+                    Blackhole
+                  </vaadin-radio-button>
                   <vaadin-radio-button
                     id="radio--supernova"
                     value="6"
                     data-property_name="posterDesign"
                     @input="${this.onInputChange}"
-                    >Supernova</vaadin-radio-button
                   >
+                    Supernova
+                  </vaadin-radio-button>
                 </vaadin-radio-group>
 
                 <br />
-                <hr />
+                <br />
 
                 <label class="theme-selection-radio w-radio">
                   <input
@@ -376,11 +382,13 @@ export class PosterFormElement extends LitElement {
                     name="Design"
                     data-property_name="posterDesign"
                     class="design-radio-button w-radio-input"
-                  /><span
+                  />
+                  <span
                     for="navy"
                     id="select-navy"
                     class="design-radio-label radio-label-image-navy w-form-label"
-                    ><span class="design-radio-label-text">
+                  >
+                    <span class="design-radio-label-text">
                       Navy
                     </span>
                   </span>
@@ -471,7 +479,26 @@ export class PosterFormElement extends LitElement {
             </vaadin-text-field>
           </div>
           <div class="info-design-container">
+            <!-- <dom-module id="custom-date-picker-test" theme-for="vaadin-date-picker">
+            <template>
+              <style>
+                :host([theme~="custom"]) {
+                  font-family: monospace;
+                        /* opacity: 0; */
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        left: 0;
+                        top: 0;
+                        display: block;
+                        background-color: transparent;
+                  /* background-color: cyan; */
+                }
+              </style>
+            </template>
+          </dom-module> -->
             <vaadin-date-picker
+              theme="custom2"
               @change="${this.onInputChange}"
               data-property_name="posterDate"
               label="#3 Date"
@@ -634,7 +661,7 @@ export class PosterFormElement extends LitElement {
                     required=""
                     class="size-radio-select w-radio-input"
                   /><span for="size-9x12-US" class="size-radio-button-label label-8x10 w-form-label"
-                    >9&quot; x 12&quot;<br
+                    >9" x 12"<br
                   /></span>
                 </label>
 
@@ -650,7 +677,7 @@ export class PosterFormElement extends LitElement {
                   /><span
                     for="size-12x16-US"
                     class="size-radio-button-label label-12x16 w-form-label"
-                    >12&quot; x 16&quot;<br
+                    >12"x 16"<br
                   /></span>
                 </label>
 
@@ -665,7 +692,7 @@ export class PosterFormElement extends LitElement {
                   /><span
                     for="size-18x24-US"
                     class="size-radio-button-label label-18x24 w-form-label"
-                    >18&quot; x 24&quot;<br
+                    >18"x 24"<br
                   /></span>
                 </label>
               </div>

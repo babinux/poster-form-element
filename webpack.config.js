@@ -14,10 +14,6 @@ const isProd = process.env.NODE_ENV === 'production';
  */
 const devPlugins = [
   new WebpackIndexHTMLPlugin({
-    minify: false,
-    inject: true,
-
-    chunks: ['vendors~index'],
     template: () => `
       <!DOCTYPE html>
           <html>
@@ -63,7 +59,7 @@ const prodPlugins = [
     extractComments: true,
     cache: true,
     parallel: true,
-    sourceMap: true, // Must be set to true if using source-maps in production
+    sourceMap: false, // Must be set to true if using source-maps in production
     terserOptions: {
       // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
     },
@@ -108,7 +104,7 @@ module.exports = {
           {
             loader: 'lit-scss-loader',
             options: {
-              minify: false, // defaults to false
+              minify: true, // defaults to false
             },
           },
           'extract-loader',
@@ -116,19 +112,17 @@ module.exports = {
           'sass-loader',
         ],
       },
+      // {
+      //   test: /\.svg$/,
+      //   use: [
+      //     {
+      //       loader: 'svg-url-loader',
+      //       options: {},
+      //     },
+      //   ],
+      // },
       {
-        test: /\.svg$/,
-        use: [
-          {
-            loader: 'file-loader',
-            // loader: 'svg-url-loader',
-            options: {},
-          },
-          'file-loader',
-        ],
-      },
-      {
-        test: /\.(png|jpg|gif)$/,
+        test: /\.(png|jpg|gif|svg)$/,
         use: ['file-loader'],
       },
       {
@@ -150,5 +144,8 @@ module.exports = {
         },
       },
     },
+    // runtimeChunk: {
+    //   name: 'runtime'
+    // }
   },
 };
