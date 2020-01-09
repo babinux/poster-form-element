@@ -5,11 +5,9 @@
   "author": "poster-form-element",
   "license": "MIT",
   "main": "index.js",
-  "type": "module",
   "module": "index.js",
   "scripts": {
-    "start": "webpack-dev-server  --mode=development  --node-resolve --open --watch --progress --info-verbosity verbose",
-    "XXXstart": "es-dev-server --app-index demo/index.html --node-resolve --open --watch",
+    "start": "webpack-dev-server  --mode=development  --node-resolve  --progress --info-verbosity verbose --open --watch",
     "lint:eslint": "eslint --ext .js,.html . --ignore-path .gitignore",
     "format:eslint": "eslint --ext .js,.html . --fix --ignore-path .gitignore",
     "lint:prettier": "prettier \"**/*.js\" --check --ignore-path .gitignore",
@@ -32,7 +30,7 @@
     "@vaadin/vaadin-radio-button": "^1.2.3",
     "@vaadin/vaadin-text-field": "^2.5.3",
     "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^3.4.0",
+    "css-loader": "^3.4.1",
     "html-webpack-plugin": "^3.2.0",
     "lit-element": "^2.0.1",
     "lit-html": "^1.0.0",
@@ -44,17 +42,6 @@
     "terser-webpack-plugin": "^2.3.1"
   },
   "babel": {
-    "presets": [
-      "@babel/preset-flow",
-      [
-        "@babel/preset-env",
-        {
-          "targets": {
-            "node": 8
-          }
-        }
-      ]
-    ],
     "plugins": [
       [
         "@babel/plugin-proposal-class-properties"
@@ -62,17 +49,19 @@
     ]
   },
   "devDependencies": {
-    "@open-wc/building-webpack": "^2.1.0",
-    "@open-wc/demoing-storybook": "^1.0.1",
+    "@open-wc/building-webpack": "^2.10.8",
+    "@open-wc/demoing-storybook": "^1.5.2",
     "@open-wc/eslint-config": "^2.0.0",
     "@open-wc/prettier-config": "^0.1.10",
-    "@open-wc/testing": "^2.0.0",
-    "@open-wc/testing-karma": "^3.0.0",
-    "@open-wc/testing-karma-bs": "^1.0.0",
+    "@open-wc/testing": "^2.5.0",
+    "@open-wc/testing-karma": "^3.2.28",
+    "@open-wc/testing-karma-bs": "^1.3.28",
+    "compression-webpack-plugin": "^3.0.1",
     "deepmerge": "^3.2.0",
-    "es-dev-server": "^1.5.0",
+    "es-dev-server": "^1.36.1",
     "eslint": "^6.1.0",
     "extract-loader": "^2.0.1",
+    "file-loader": "^5.0.2",
     "husky": "^1.0.0",
     "lint-staged": "^8.0.0",
     "webpack": "^4.28.0",

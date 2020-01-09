@@ -1,55 +1,44 @@
-import {
-  html,
-  css,
-  LitElement
-} from 'lit-element';
+/* eslint-disable lit/binding-positions */
+import { html, LitElement } from 'lit-element';
 
 // Style Import : Main/Current Component Style
 import componentStyle from './style.scss';
-
 
 import 'poster-design-element';
 import '@vaadin/vaadin-date-picker';
 import '@vaadin/vaadin-text-field';
 import '@vaadin/vaadin-radio-button';
 
-
-
-
 // NOT SURE I NEED THAT ============================
-// 
+//
 // List : All the designs for Poster
-const posterDesigns = ['', 'cosmic-latte', 'deep-space-blue', 'navy', 'cosmic-love', 'blackhole', 'supernova'];
+// const posterDesigns = ['', 'cosmic-latte', 'deep-space-blue', 'navy', 'cosmic-love', 'blackhole', 'supernova'];
 
 // Settings : color of the planets orbits based on the poster's background
 const posterDarkOrbits = ['2', '4'];
 // NOT SURE I NEED THAT ============================
 
-
 // Settings : Human readable date
-const posterDateSettings = {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric'
-};
-
-
+// const posterDateSettings = {
+//   year: 'numeric',
+//   month: 'long',
+//   day: 'numeric'
+// };
 
 export class PosterFormElement extends LitElement {
   static get styles() {
     return [componentStyle];
   }
 
-
   static get properties() {
     return {
       posterDesign: {
         type: String,
-        reflect: true
+        reflect: true,
       },
       posterDate: {
         type: Object,
-        reflect: true
+        reflect: true,
         // ,
         // converter(value) {
         //   return new Date(value);
@@ -64,24 +53,24 @@ export class PosterFormElement extends LitElement {
       },
       posterPrint: {
         type: String,
-        reflect: true
+        reflect: true,
       },
       posterTitle: {
         type: String,
-        reflect: true
+        reflect: true,
       },
       posterSubtitle: {
         type: String,
-        reflect: true
+        reflect: true,
       },
       posterCoordinates: {
         type: String,
-        reflect: true
+        reflect: true,
       },
       posterLocation: {
         type: String,
-        reflect: true
-      }
+        reflect: true,
+      },
       // ,
       // color: {
       //   type: String,
@@ -105,7 +94,6 @@ export class PosterFormElement extends LitElement {
   //   super.disconnectedCallback();
   // }
 
-
   constructor() {
     super();
     // this.title = 'Hey there';
@@ -117,32 +105,28 @@ export class PosterFormElement extends LitElement {
 
     this.observeMe = new Proxy(this.posterParams, this.handlerMe);
 
-
     this.updatePropsFromUrl();
 
     this.counter = 5;
   }
 
-
+  // eslint-disable-next-line class-methods-use-this
   handlerMe() {
     alert('asdasd');
   }
 
-
   firstUpdated() {
-
     this.updateUrlFromProps();
   }
 
   attributeChangedCallback(attr, oldVal, newVal) {
     // this.color = attr === "posterDesign" ? posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white' : false;
 
-
     console.log('======');
 
     // console.log(attr);
     // console.log(this.color);
-    if (attr === "posterdesign") {
+    if (attr === 'posterdesign') {
       this.color = posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white';
       // console.log(this.color);
     }
@@ -158,14 +142,37 @@ export class PosterFormElement extends LitElement {
     this.url = new URL(document.location);
     this.posterParams = new URLSearchParams(this.url.search);
 
-    this.posterPrint = this.posterParams.has("posterPrint") && this.posterParams.get("posterPrint") > 0 ? 1 : 0;
-    this.posterTitle = this.posterParams.has("posterTitle") ? this.posterParams.get("posterTitle") : 'Name Of Someone You Love';
-    this.posterSubtitle = this.posterParams.has("posterSubtitle") ? this.posterParams.get("posterSubtitle") : '';
-    this.posterLocation = this.posterParams.has("posterLocation") ? this.posterParams.get("posterLocation") : 'Amazing Place, World Country';
-    this.posterCoordinates = this.posterParams.has("posterCoordinates") ? this.posterParams.get("posterCoordinates") : '00.00000°N -000.00000°W';
-    this.posterDesign = this.posterParams.has("posterDesign") ? this.posterParams.get("posterDesign") : '1';
-    this.color = this.posterParams.has("color") ? this.posterParams.get("color") : posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white';
-    this.posterDate = this.posterParams.has("posterDate") ? new Date(isNaN(this.posterParams.get("posterDate")) ? this.posterParams.get("posterDate") : new Date()) : new Date();
+    this.posterPrint =
+      this.posterParams.has('posterPrint') && this.posterParams.get('posterPrint') > 0 ? 1 : 0;
+    this.posterTitle = this.posterParams.has('posterTitle')
+      ? this.posterParams.get('posterTitle')
+      : 'Name Of Someone You Love';
+    this.posterSubtitle = this.posterParams.has('posterSubtitle')
+      ? this.posterParams.get('posterSubtitle')
+      : '';
+    this.posterLocation = this.posterParams.has('posterLocation')
+      ? this.posterParams.get('posterLocation')
+      : 'Amazing Place, World Country';
+    this.posterCoordinates = this.posterParams.has('posterCoordinates')
+      ? this.posterParams.get('posterCoordinates')
+      : '00.00000°N -000.00000°W';
+    this.posterDesign = this.posterParams.has('posterDesign')
+      ? this.posterParams.get('posterDesign')
+      : '1';
+    // eslint-disable-next-line no-nested-ternary
+    this.color = this.posterParams.has('color')
+      ? this.posterParams.get('color')
+      : posterDarkOrbits.includes(this.posterDesign)
+      ? 'black'
+      : 'white';
+    // eslint-disable-next-line no-restricted-globals
+    this.posterDate = this.posterParams.has('posterDate')
+      ? new Date(
+          isNaN(this.posterParams.get('posterDate'))
+            ? this.posterParams.get('posterDate')
+            : new Date(),
+        )
+      : new Date();
     this.posterFormatedDate = this.posterDate;
   }
 
@@ -174,50 +181,47 @@ export class PosterFormElement extends LitElement {
     this.posterParams = new URLSearchParams(this.url.search);
 
     // this.posterParams.set("color", this.color);
-    this.posterParams.set("posterSize", "9x12");
+    this.posterParams.set('posterSize', '9x12');
 
-    this.posterParams.set("posterPrint", this.posterPrint);
-    this.posterParams.set("posterDesign", this.posterDesign);
-    this.posterParams.set("posterDate", `${this.posterDate.getFullYear()}-${this.posterDate.toLocaleString('default', { month: 'short' })}-${this.posterDate.getDate()}`);
-    this.posterParams.set("posterTitle", this.posterTitle);
+    this.posterParams.set('posterPrint', this.posterPrint);
+    this.posterParams.set('posterDesign', this.posterDesign);
+    this.posterParams.set(
+      'posterDate',
+      `${this.posterDate.getFullYear()}-${this.posterDate.toLocaleString('default', {
+        month: 'short',
+      })}-${this.posterDate.getDate()}`,
+    );
+    this.posterParams.set('posterTitle', this.posterTitle);
     // this.posterParams.set("posterSubtitle", this.posterSubtitle);
-    this.posterParams.set("posterLocation", this.posterLocation);
-    this.posterParams.set("posterCoordinates", this.posterCoordinates);
+    this.posterParams.set('posterLocation', this.posterLocation);
+    this.posterParams.set('posterCoordinates', this.posterCoordinates);
 
-    window.history.replaceState({}, "Updating poster Design", `?${this.posterParams.toString()}`)
+    window.history.replaceState({}, 'Updating poster Design', `?${this.posterParams.toString()}`);
   }
 
-
-
   onInputChange(event) {
-    let input = event.target || event.srcElement;
+    const input = event.target || event.srcElement;
     console.log(input);
     // console.log(caller.name);
     // console.log(caller.id);
-    console.log(input.getAttribute('data-property-name'));
+    console.log(input.getAttribute('data-property_name'));
     console.log(input.value);
 
+    if (input.getAttribute('data-property_name') === 'posterDate') {
+      console.log(input.getAttribute('data-property_name'));
+      console.log('+-----+');
 
-
-    if (input.getAttribute('data-property-name') === "posterDate") {
-      console.log(input.getAttribute('data-property-name'));
-      console.log("+-----+");
-
-      this[input.getAttribute('data-property-name')] = new Date(input.value);
-      console.log(this[input.getAttribute('data-property-name')]);
+      this[input.getAttribute('data-property_name')] = new Date(input.value);
+      console.log(this[input.getAttribute('data-property_name')]);
       console.log(this.posterDate);
-      console.log("+++++");
+      console.log('+++++');
 
       console.log(this.posterFormatedDate);
-
-
 
       this.posterFormatedDate = this.posterDate;
       console.log(this.posterFormatedDate);
-
-
     } else {
-      this[input.getAttribute('data-property-name')] = input.value;
+      this[input.getAttribute('data-property_name')] = input.value;
     }
   }
 
@@ -226,139 +230,221 @@ export class PosterFormElement extends LitElement {
   // }
 
   render() {
-    return html `
+    return html`
+      <style>
+        #mygrid {
+          display: flex;
+          /* flex-direction: row-reverse; */
+        }
+        form {
+          max-width: 300px;
+        }
+        poster-design-element {
+          max-width: 400px;
+          max-height: 600px;
 
-  <style>
-  #mygrid{
-    display:flex;
-    /* flex-direction: row-reverse; */
-  }
-  form{
-    max-width:300px;
-  }
-  poster-design-element{
-    max-width: 400px;
-    max-height: 600px;
+          order: 2;
+          margin-left: 20px;
+        }
+      </style>
 
-    order: 2;
-    margin-left: 20px;
-  }
-  </style>
+      <div id="mygrid">
+        <poster-design-element
+          postertitle="${this.posterTitle}"
+          postersubtitle="${this.posterSubtitle}"
+          posterlocation="${this.posterLocation}"
+          postercoordinates="${this.posterCoordinates}"
+          posterdesign="${this.posterDesign}"
+          color="${this.color}"
+          posterdate="${this.posterDate}"
+          posterformateddate="${this.posterFormatedDate}"
+        >
+        </poster-design-element>
 
-<div id="mygrid">
+        <form
+          id="Form-Design-Settings"
+          name="wf-form-Settings"
+          data-property_name="Settings"
+          method="get"
+          class="form"
+        >
+          <div class="info-design-container">
+            <label for="mySubtitle" class="">
+              #1 Select Your Design
+            </label>
 
+            <div class="div-block-53">
+              <div class="map-design-selector">
+                <vaadin-radio-group label="Poster Design">
+                  <vaadin-radio-button
+                    id="radio--cosmic-latte"
+                    value="1"
+                    data-property_name="posterDesign"
+                    @change="${this.onInputChange}"
+                    >Cosmic Latte</vaadin-radio-button
+                  >
+                  <vaadin-radio-button
+                    id="radio--deep-space-blue"
+                    value="2"
+                    data-property_name="posterDesign"
+                    @input="${this.onInputChange}"
+                    >Deep Space Blue</vaadin-radio-button
+                  >
+                  <vaadin-radio-button
+                    id="radio--navy"
+                    value="3"
+                    data-property_name="posterDesign"
+                    @input="${this.onInputChange}"
+                    >Navy</vaadin-radio-button
+                  >
+                  <vaadin-radio-button
+                    id="radio--cosmic-love"
+                    value="4"
+                    data-property_name="posterDesign"
+                    @input="${this.onInputChange}"
+                    >Cosmic Love</vaadin-radio-button
+                  >
+                  <vaadin-radio-button
+                    id="radio--blackhole"
+                    value="5"
+                    data-property_name="posterDesign"
+                    @input="${this.onInputChange}"
+                    >Blackhole</vaadin-radio-button
+                  >
+                  <vaadin-radio-button
+                    id="radio--supernova"
+                    value="6"
+                    data-property_name="posterDesign"
+                    @input="${this.onInputChange}"
+                    >Supernova</vaadin-radio-button
+                  >
+                </vaadin-radio-group>
 
+                <br />
+                <hr />
 
-  <poster-design-element 
-    postertitle="${this.posterTitle}" 
-    postersubtitle="${this.posterSubtitle}"
-    posterlocation="${this.posterLocation}" 
-    postercoordinates="${this.posterCoordinates}"
-    posterdesign="${this.posterDesign}" 
-    color="${this.color}" 
-    posterdate="${this.posterDate}"
-    posterformateddate="${this.posterFormatedDate}">
-  </poster-design-element>
+                <label class="theme-selection-radio w-radio">
+                  <input
+                    type="radio"
+                    id="cosmic-latte"
+                    value="1"
+                    @input="${this.onInputChange}"
+                    name="Design"
+                    data-property_name="posterDesign"
+                    class="design-radio-button w-radio-input"
+                  />
+                  <span
+                    for="cosmic-latte"
+                    id="select-cosmic-latte"
+                    class="design-radio-label radio-label-image-cosmic-latte w-form-label"
+                  >
+                    <span class="design-radio-label-text">
+                      Cosmic Latte
+                    </span>
+                  </span>
+                </label>
 
+                <label class="theme-selection-radio w-radio">
+                  <!-- <input type="radio" id="deep-space-blue" name="Design" value="deep-space-blue"
+                data-property_name="Design" class="design-radio-button w-radio-input" /> -->
+                  <input
+                    type="radio"
+                    id="deep-space-blue"
+                    value="2"
+                    @input="${this.onInputChange}"
+                    name="Design"
+                    data-property_name="posterDesign"
+                    class="design-radio-button w-radio-input"
+                  />
+                  <span
+                    for="deep-space-blue"
+                    id="select-deep-space-blue"
+                    class="design-radio-label radio-label-image-deep-space-blue w-form-label"
+                  >
+                    <span class="design-radio-label-text">
+                      Deep Space Blue
+                    </span>
+                  </span>
+                </label>
 
-  <form id="Form-Design-Settings" name="wf-form-Settings" data-property-name="Settings" method="get" class="form">
-    <div class="info-design-container">
-      <label for="mySubtitle" class="">
-        #1 Select Your Design
-      </label>
+                <label class="theme-selection-radio w-radio">
+                  <input
+                    type="radio"
+                    id="navy"
+                    value="3"
+                    @input="${this.onInputChange}"
+                    name="Design"
+                    data-property_name="posterDesign"
+                    class="design-radio-button w-radio-input"
+                  /><span
+                    for="navy"
+                    id="select-navy"
+                    class="design-radio-label radio-label-image-navy w-form-label"
+                    ><span class="design-radio-label-text">
+                      Navy
+                    </span>
+                  </span>
+                </label>
 
-      <div class="div-block-53">
-        <div class="map-design-selector">
+                <label class="theme-selection-radio w-radio">
+                  <input
+                    type="radio"
+                    id="cosmic-love"
+                    value="4"
+                    @input="${this.onInputChange}"
+                    name="Design"
+                    data-property_name="posterDesign"
+                    class="design-radio-button w-radio-input"
+                  /><span
+                    for="cosmic-love"
+                    id="select-cosmic-love"
+                    class="design-radio-label radio-label-image-cosmic-love w-form-label"
+                    ><span class="design-radio-label-text">
+                      Cosmic Love
+                    </span></span
+                  >
+                </label>
 
-          <vaadin-radio-group label="Poster Design" >
-            <vaadin-radio-button id="radio--cosmic-latte" value="1" data-property-name="posterDesign" @change="${this.onInputChange}" >Cosmic Latte</vaadin-radio-button>
-            <vaadin-radio-button id="radio--deep-space-blue" value="2" data-property-name="posterDesign" @input="${this.onInputChange}">Deep Space Blue</vaadin-radio-button>
-            <vaadin-radio-button id="radio--navy" value="3" data-property-name="posterDesign" @input="${this.onInputChange}" >Navy</vaadin-radio-button>
-            <vaadin-radio-button id="radio--cosmic-love" value="4" data-property-name="posterDesign" @input="${this.onInputChange}" >Cosmic Love</vaadin-radio-button>
-            <vaadin-radio-button id="radio--blackhole" value="5" data-property-name="posterDesign" @input="${this.onInputChange}" >Blackhole</vaadin-radio-button>
-            <vaadin-radio-button id="radio--supernova" value="6" data-property-name="posterDesign" @input="${this.onInputChange}" >Supernova</vaadin-radio-button>
-          </vaadin-radio-group>
+                <label class="theme-selection-radio w-radio">
+                  <input
+                    type="radio"
+                    id="blackhole"
+                    value="5"
+                    @input="${this.onInputChange}"
+                    name="Design"
+                    data-property_name="posterDesign"
+                    class="design-radio-button w-radio-input"
+                  /><span
+                    for="blackhole"
+                    id="select-blackhole"
+                    class="design-radio-label radio-label-image-blackhole w-form-label"
+                    ><span class="design-radio-label-text">Blackhole</span></span
+                  >
+                </label>
 
-          <br><hr>
-
-          <label class="theme-selection-radio w-radio">
-            <input type="radio" id="cosmic-latte" 
-              value="1" 
-              @input="${this.onInputChange}" 
-              name="Design"
-              data-property-name="posterDesign" 
-              class="design-radio-button w-radio-input" />
-            <span for="cosmic-latte" id="select-cosmic-latte"
-              class="design-radio-label radio-label-image-cosmic-latte w-form-label">
-              <span class="design-radio-label-text">
-                Cosmic Latte
-              </span>
-            </span>
-          </label>
-
-
-          <label class="theme-selection-radio w-radio">
-            <!-- <input type="radio" id="deep-space-blue" name="Design" value="deep-space-blue"
-                data-property-name="Design" class="design-radio-button w-radio-input" /> -->
-            <input type="radio" id="deep-space-blue" value="2" @input="${this.onInputChange}" name="Design"
-              data-property-name="posterDesign" class="design-radio-button w-radio-input" />
-            <span for="deep-space-blue" id="select-deep-space-blue"
-              class="design-radio-label radio-label-image-deep-space-blue w-form-label">
-              <span class="design-radio-label-text">
-                Deep Space Blue
-              </span>
-            </span>
-          </label>
-
-
-          <label class="theme-selection-radio w-radio">
-            <input type="radio" id="navy" value="3" @input="${this.onInputChange}" name="Design"
-              data-property-name="posterDesign" class="design-radio-button w-radio-input" /><span for="navy"
-              id="select-navy" class="design-radio-label radio-label-image-navy w-form-label"><span
-                class="design-radio-label-text">
-                Navy
-              </span>
-            </span>
-          </label>
-
-
-
-          <label class="theme-selection-radio w-radio">
-            <input type="radio" id="cosmic-love" value="4" @input="${this.onInputChange}" name="Design"
-              data-property-name="posterDesign" class="design-radio-button w-radio-input" /><span for="cosmic-love"
-              id="select-cosmic-love" class="design-radio-label radio-label-image-cosmic-love w-form-label"><span
-                class="design-radio-label-text">
-                Cosmic Love
-              </span></span>
-          </label>
-
-
-          <label class="theme-selection-radio w-radio">
-            <input type="radio" id="blackhole" value="5" @input="${this.onInputChange}" name="Design"
-              data-property-name="posterDesign" class="design-radio-button w-radio-input" /><span for="blackhole"
-              id="select-blackhole" class="design-radio-label radio-label-image-blackhole w-form-label"><span
-                class="design-radio-label-text">Blackhole</span></span>
-          </label>
-
-
-          <label class="theme-selection-radio w-radio">
-            <input type="radio" id="supernova" 
-            name="Design" value="6" @input="${this.onInputChange}" 
-              data-property-name="posterDesign" 
-              class="design-radio-button w-radio-input" />
-              <span 
-                for="supernova"
-                id="select-supernova" 
-                class="design-radio-label radio-label-image-supernova w-form-label">
-              <span
-                class="design-radio-label-text">Supernova</span></span>
-          </label>
-
-        </div>
-      </div>
-    </div>
-    <div class="info-design-container">
-<!-- 
+                <label class="theme-selection-radio w-radio">
+                  <input
+                    type="radio"
+                    id="supernova"
+                    name="Design"
+                    value="6"
+                    @input="${this.onInputChange}"
+                    data-property_name="posterDesign"
+                    class="design-radio-button w-radio-input"
+                  />
+                  <span
+                    for="supernova"
+                    id="select-supernova"
+                    class="design-radio-label radio-label-image-supernova w-form-label"
+                  >
+                    <span class="design-radio-label-text">Supernova</span></span
+                  >
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="info-design-container">
+            <!--
 
       <label for="mySubtitle" class="">
         #2 Location
@@ -369,25 +455,33 @@ export class PosterFormElement extends LitElement {
         Location / Place / City
       </label>
 
-      <input value="${this.posterLocation}" @input="${this.onInputChange}" type="text" class="" name="posterLocation"
-        data-property-name="posterLocation" placeholder="Choose Location" id="posterLocation" required="" /> -->
+      // eslint-disable-next-line lit/binding-positions
+      // eslint-disable-next-line lit/binding-positions
+      <input value="${this.posterLocation}" @input="${this
+              .onInputChange}" type="text" class="" name="posterLocation"
+        data-property_name="posterLocation" placeholder="Choose Location" id="posterLocation" required="" /> -->
 
+            <vaadin-text-field
+              @input="${this.onInputChange}"
+              label="#2 Location"
+              value="${this.posterLocation}"
+              data-property_name="posterLocation"
+              placeholder="Location"
+            >
+            </vaadin-text-field>
+          </div>
+          <div class="info-design-container">
+            <vaadin-date-picker
+              @change="${this.onInputChange}"
+              data-property_name="posterDate"
+              label="#3 Date"
+              placeholder="Pick a date"
+              value="${this.posterDate}"
+            >
+            </vaadin-date-picker>
 
-        <vaadin-text-field @input="${this.onInputChange}" label="#2 Location"
-          value="${this.posterLocation}" data-property-name="posterLocation"
-          placeholder="Location">
-        </vaadin-text-field>
-
-    </div>
-    <div class="info-design-container">
-
-      <vaadin-date-picker @change="${this.onInputChange}" data-property-name="posterDate" label="#3 Date"
-        placeholder="Pick a date" value="${this.posterDate}">
-      </vaadin-date-picker>
-
-
-      <!-- 
-        <div class="div-block-47"><select id="Day" name="Day" data-property-name="Day" required=""
+            <!--
+        <div class="div-block-47"><select id="Day" name="Day" data-property_name="Day" required=""
             class="field-day app-menu-text-field w-select">
             <option value="1">1</option>
             <option value="2">2</option>
@@ -420,7 +514,7 @@ export class PosterFormElement extends LitElement {
             <option value="29">29</option>
             <option value="30">30</option>
             <option value="31">31</option>
-          </select><select id="Month" name="Month" data-property-name="Month" required=""
+          </select><select id="Month" name="Month" data-property_name="Month" required=""
             class="app-menu-text-field field-month w-select">
             <option value="0">January</option>
             <option value="1">February</option>
@@ -434,7 +528,7 @@ export class PosterFormElement extends LitElement {
             <option value="9">October</option>
             <option value="10">November</option>
             <option value="11">December</option>
-          </select><select id="Year" name="Year" data-property-name="Year" required=""
+          </select><select id="Year" name="Year" data-property_name="Year" required=""
             class="field-year app-menu-text-field w-select">
             <option value="1970">1970</option>
             <option value="1971">1971</option>
@@ -491,81 +585,94 @@ export class PosterFormElement extends LitElement {
             <option value="2022">2022</option>
           </select></div>
       </div> -->
+          </div>
 
-
-    </div>
-
-
-
-
-    <div class="info-design-container">
-      <div class="map-text-design">
-
-        <!-- <label for="posterTitle" class="">
+          <div class="info-design-container">
+            <div class="map-text-design">
+              <!-- <label for="posterTitle" class="">
           #4
           Customize the text of your moment
         </label> -->
 
-
-
-
-        <!-- <input id="posterTitle" value="${this.posterTitle}" @input="${this.onInputChange}" type="text" name="posterTitle" data-property-name="posterTitle"
+              <!-- <input id="posterTitle" value="${this.posterTitle}" @input="${this
+                .onInputChange}" type="text" name="posterTitle" data-property_name="posterTitle"
           placeholder="Names, Special Moment or Occasion ..." id="Title" required="true"  /> -->
 
-        <vaadin-text-field @input="${this.onInputChange}" label="#4 Customize the text of your moment"
-          value="${this.posterTitle}" data-property-name="posterTitle"
-          placeholder="Names, Special Moment or Occasion ...">
-        </vaadin-text-field>
+              <vaadin-text-field
+                @input="${this.onInputChange}"
+                label="#4 Customize the text of your moment"
+                value="${this.posterTitle}"
+                data-property_name="posterTitle"
+                placeholder="Names, Special Moment or Occasion ..."
+              >
+              </vaadin-text-field>
 
-         <vaadin-text-field @input="${this.onInputChange}" label="#4 Customize the text of your moment"
-          value="${this.posterTitle}" data-property-name="posterTitle"
-          placeholder="Names, Special Moment or Occasion ...">
-        </vaadin-text-field>
+              <vaadin-text-field
+                @input="${this.onInputChange}"
+                label="#4 Customize the text of your moment"
+                value="${this.posterTitle}"
+                data-property_name="posterTitle"
+                placeholder="Names, Special Moment or Occasion ..."
+              >
+              </vaadin-text-field>
+            </div>
+          </div>
+          <div class="info-design-container">
+            <label for="mySubtitle" class="">
+              #5 Select Size
+            </label>
 
+            <div class="div-block-45">
+              <div class="div-block-63">
+                <label data-size="9x12" class="size-selection-radio w-radio">
+                  <input
+                    type="radio"
+                    id="size-9x12-US"
+                    name="Size"
+                    value="size-9x12-US"
+                    data-property_name="Size"
+                    required=""
+                    class="size-radio-select w-radio-input"
+                  /><span for="size-9x12-US" class="size-radio-button-label label-8x10 w-form-label"
+                    >9&quot; x 12&quot;<br
+                  /></span>
+                </label>
 
+                <label data-size="12x16" class="size-selection-radio w-radio">
+                  <input
+                    type="radio"
+                    id="size-12x16-US"
+                    name="Size"
+                    value="size-12x16-US"
+                    data-property_name="Size"
+                    required=""
+                    class="size-radio-select w-radio-input"
+                  /><span
+                    for="size-12x16-US"
+                    class="size-radio-button-label label-12x16 w-form-label"
+                    >12&quot; x 16&quot;<br
+                  /></span>
+                </label>
 
+                <label data-size="18x24" class="size-selection-radio w-radio">
+                  <input
+                    type="radio"
+                    id="size-18x24-US"
+                    name="Size"
+                    value="size-18x24-US"
+                    data-property_name="Size"
+                    class="size-radio-select w-radio-input"
+                  /><span
+                    for="size-18x24-US"
+                    class="size-radio-button-label label-18x24 w-form-label"
+                    >18&quot; x 24&quot;<br
+                  /></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
-    </div>
-    <div class="info-design-container">
-
-      <label for="mySubtitle" class="">
-        #5 Select Size
-      </label>
-
-      <div class="div-block-45">
-        <div class="div-block-63">
-
-          <label data-size="9x12" class="size-selection-radio w-radio">
-            <input type="radio" id="size-9x12-US" name="Size" value="size-9x12-US" data-property-name="Size" required=""
-              class="size-radio-select w-radio-input" /><span for="size-9x12-US"
-              class="size-radio-button-label label-8x10 w-form-label">9&quot; x
-              12&quot;<br /></span>
-          </label>
-
-
-          <label data-size="12x16" class="size-selection-radio w-radio">
-            <input type="radio" id="size-12x16-US" name="Size" value="size-12x16-US" data-property-name="Size"
-              required="" class="size-radio-select w-radio-input" /><span for="size-12x16-US"
-              class="size-radio-button-label label-12x16 w-form-label">12&quot; x
-              16&quot;<br /></span>
-          </label>
-
-
-          <label data-size="18x24" class="size-selection-radio w-radio">
-            <input type="radio" id="size-18x24-US" name="Size" value="size-18x24-US" data-property-name="Size"
-              class="size-radio-select w-radio-input" /><span for="size-18x24-US"
-              class="size-radio-button-label label-18x24 w-form-label">18&quot; x
-              24&quot;<br /></span>
-          </label>
-        </div>
-      </div>
-    </div>
-
-
-  </form>
-
-</div>
-
     `;
   }
 }
