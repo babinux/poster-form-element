@@ -6,6 +6,7 @@ import 'poster-design-element';
 import '@vaadin/vaadin-date-picker';
 import '@vaadin/vaadin-text-field';
 import '@vaadin/vaadin-radio-button';
+import '@vaadin/vaadin-radio-button/vaadin-radio-group.js';
 import '@vaadin/vaadin-combo-box';
 import '@vaadin/vaadin-context-menu';
 
@@ -16,6 +17,44 @@ const GoogleMapsLoader = require('google-maps'); // only for common js environme
 
 GoogleMapsLoader.KEY = 'AIzaSyCq8BCifO8u5oCBMPcbZsh6Q4MySDX-4JQ';
 GoogleMapsLoader.LIBRARIES = ['places'];
+
+const posterDesigns = [
+  {
+    id: 'cosmic-latte',
+    color: 'black',
+    title: 'Cosmic Latte',
+  },
+  {
+    id: 'deep-space-blue',
+    color: 'white',
+    title: 'Deep Space Blue',
+  },
+  {
+    id: 'navy',
+    color: 'white',
+    title: 'Navy',
+  },
+  {
+    id: 'cosmic-love',
+    color: 'white',
+    title: 'Cosmic Love',
+  },
+  {
+    id: 'blackhole',
+    color: 'white',
+    title: 'Blackhole',
+  },
+  {
+    id: 'supernova',
+    color: 'white',
+    title: 'Supernova',
+  },
+  {
+    id: 'milk-drop',
+    color: 'white',
+    title: 'Milk Drop',
+  },
+];
 
 const posterDarkOrbits = ['2', '4'];
 
@@ -87,9 +126,6 @@ export class PosterFormElement extends LitElement {
     // Getter: URL and Params for use later
     this.url = new URL(document.location);
     this.posterParams = new URLSearchParams(this.url.search);
-
-    this.posterSize = '18x24-US';
-
     this.observeMe = new Proxy(this.posterParams, this.handlerMe);
 
     this.updatePropsFromUrl();
@@ -179,18 +215,19 @@ export class PosterFormElement extends LitElement {
   onInputChange(event) {
     const input = event.target || event.srcElement;
 
+    console.log(`input changed`);
     if (input.getAttribute('data-property_name') === 'posterDate') {
-      console.log('Date Update ------>');
+      // console.log('Date Update ------>');
 
       this[input.getAttribute('data-property_name')] = input.value;
       // this[input.getAttribute('data-property_name')] = new Date(input.value);
       // this.posterFormatedDate = this.posterDate;
     } else if (input.getAttribute('data-property_name') === 'posterSize') {
-      console.log(`prop ------>${input.getAttribute('data-property_name')}`);
-      console.log(`INPUT  val ------>${input.value}`);
+      // console.log(`prop ------>${input.getAttribute('data-property_name')}`);
+      // console.log(`INPUT  val ------>${input.value}`);
       // this.posterSize = 'abc';
       this.posterSize = input.value;
-      console.log(`POSTER SIZE  val ------>${this.posterSize}`);
+      // console.log(`POSTER SIZE  val ------>${this.posterSize}`);
 
       // this[input.getAttribute('data-property_name')] = input.value;
       // this.posterParams.set('posterSize', input.value);
@@ -218,179 +255,34 @@ export class PosterFormElement extends LitElement {
         </div>
           <div class="admin-poster-layout--block--left">
             <div class="info-design-container">
-              <vaadin-radio-group label="Poster Design">
-                <vaadin-radio-button
-                  id="radio--cosmic-latte"
-                  value="1"
-                  data-property_name="posterDesign"
-                  @change="${this.onInputChange}"
-                >
-                  Cosmic Latte
-                </vaadin-radio-button>
-                <vaadin-radio-button
-                  id="radio--deep-space-blue"
-                  value="2"
-                  data-property_name="posterDesign"
-                  @input="${this.onInputChange}"
-                >
-                  Deep Space Blue
-                </vaadin-radio-button>
-                <vaadin-radio-button
-                  id="radio--navy"
-                  value="3"
-                  data-property_name="posterDesign"
-                  @input="${this.onInputChange}"
-                >
-                  Navy
-                </vaadin-radio-button>
-                <vaadin-radio-button
-                  id="radio--cosmic-love"
-                  value="4"
-                  data-property_name="posterDesign"
-                  @input="${this.onInputChange}"
-                >
-                  Cosmic Love
-                </vaadin-radio-button>
-                <vaadin-radio-button
-                  id="radio--blackhole"
-                  value="5"
-                  data-property_name="posterDesign"
-                  @input="${this.onInputChange}"
-                >
-                  Blackhole
-                </vaadin-radio-button>
-                <vaadin-radio-button
-                  id="radio--supernova"
-                  value="6"
-                  data-property_name="posterDesign"
-                  @input="${this.onInputChange}"
-                >
-                  Supernova
-                </vaadin-radio-button>
+
+
+              <vaadin-radio-group id="bla"
+                label="Poster Design Groupe"
+                required
+                error-message="Please select a design"
+                @click="${this.onInputChange}"
+              >
+                 <legend>Select Design</legend>
+                ${posterDesigns.map(
+                  (design, index) => html`
+                    <vaadin-radio-button
+                      id="radio--${design.id}"
+                      value="${index}"
+                      name="design-${design.id}"
+                      data-property_name="posterDesign"
+                      @change="${this.onInputChange}"
+                      @input="${this.onInputChange}"
+                      ?checked=${index === Number(this.posterDesign)}
+                    >
+                      ${design.title}
+                    </vaadin-radio-button>
+                  `,
+                )}
+
               </vaadin-radio-group>
 
-              <br />
-              <br />
 
-              <label class="theme-selection-radio w-radio">
-                <input
-                  type="radio"
-                  id="cosmic-latte"
-                  value="1"
-                  @input="${this.onInputChange}"
-                  name="Design"
-                  data-property_name="posterDesign"
-                  class="design-radio-button w-radio-input"
-                />
-                <span
-                  for="cosmic-latte"
-                  id="select-cosmic-latte"
-                  class="design-radio-label radio-label-image-cosmic-latte w-form-label"
-                >
-                  <span class="design-radio-label-text">
-                    Cosmic Latte
-                  </span>
-                </span>
-              </label>
-
-              <label class="theme-selection-radio w-radio">
-                <input
-                  type="radio"
-                  id="deep-space-blue"
-                  value="2"
-                  @input="${this.onInputChange}"
-                  name="Design"
-                  data-property_name="posterDesign"
-                  class="design-radio-button w-radio-input"
-                />
-                <span
-                  for="deep-space-blue"
-                  id="select-deep-space-blue"
-                  class="design-radio-label radio-label-image-deep-space-blue w-form-label"
-                >
-                  <span class="design-radio-label-text">
-                    Deep Space Blue
-                  </span>
-                </span>
-              </label>
-
-              <label class="theme-selection-radio w-radio">
-                <input
-                  type="radio"
-                  id="navy"
-                  value="3"
-                  @input="${this.onInputChange}"
-                  name="Design"
-                  data-property_name="posterDesign"
-                  class="design-radio-button w-radio-input"
-                />
-                <span
-                  for="navy"
-                  id="select-navy"
-                  class="design-radio-label radio-label-image-navy w-form-label"
-                >
-                  <span class="design-radio-label-text">
-                    Navy
-                  </span>
-                </span>
-              </label>
-
-              <label class="theme-selection-radio w-radio">
-                <input
-                  type="radio"
-                  id="cosmic-love"
-                  value="4"
-                  @input="${this.onInputChange}"
-                  name="Design"
-                  data-property_name="posterDesign"
-                  class="design-radio-button w-radio-input"
-                /><span
-                  for="cosmic-love"
-                  id="select-cosmic-love"
-                  class="design-radio-label radio-label-image-cosmic-love w-form-label"
-                >
-                  <span class="design-radio-label-text">
-                    Cosmic Love
-                  </span>
-                </span>
-              </label>
-
-              <label class="theme-selection-radio w-radio">
-                <input
-                  type="radio"
-                  id="blackhole"
-                  value="5"
-                  @input="${this.onInputChange}"
-                  name="Design"
-                  data-property_name="posterDesign"
-                  class="design-radio-button w-radio-input"
-                /><span
-                  for="blackhole"
-                  id="select-blackhole"
-                  class="design-radio-label radio-label-image-blackhole w-form-label"
-                >
-                  <span class="design-radio-label-text">Blackhole</span>
-                </span>
-              </label>
-
-              <label class="theme-selection-radio w-radio">
-                <input
-                  type="radio"
-                  id="supernova"
-                  name="Design"
-                  value="6"
-                  @input="${this.onInputChange}"
-                  data-property_name="posterDesign"
-                  class="design-radio-button w-radio-input"
-                />
-                <span
-                  for="supernova"
-                  id="select-supernova"
-                  class="design-radio-label radio-label-image-supernova w-form-label"
-                >
-                  <span class="design-radio-label-text">Supernova</span></span
-                >
-              </label>
             </div>
 
             <div class="info-design-container">
@@ -512,7 +404,9 @@ export class PosterFormElement extends LitElement {
                       name="Size"
                       value="size-18x24-US"
                       data-property_name="posterSize"
-                      @input="${this.onInputChange}"                      class="size-radio-select w-radio-input"
+                      @input="${
+                        this.onInputChange
+                      }"                      class="size-radio-select w-radio-input"
                     /><span
                       for="size-18x24-US"
                       class="size-radio-button-label label-18x24 w-form-label"

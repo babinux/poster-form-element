@@ -27,6 +27,7 @@
   "dependencies": {
     "@em-polymer/google-map": "^3.0.0-pre.5",
     "@open-wc/webpack-index-html-plugin": "^1.5.10",
+    "@vaadin/vaadin": "^14.1.4",
     "@vaadin/vaadin-combo-box": "^5.0.9",
     "@vaadin/vaadin-context-menu": "^4.3.15",
     "@vaadin/vaadin-date-picker": "^4.0.5",
