@@ -1,17 +1,54 @@
-.posterFormContainer {
-  padding: 20px;
-}
-#Form-Design-Settings {
-  background-color: #eee;
+body {
+  margin: 0 !important;
 }
 .info-design-container {
   display: block;
   margin-block-end: 20px;
 }
-input[type='text'] {
+label {
   display: block;
 }
-.info-design-container > label {
-  margin-bottom: 10px;
-  display: block;
+
+#mygrid {
+  display: grid;
+  grid-template-columns: 25% 55% 20%;
+  height: 100%;
+  /* flex-direction: row-reverse; */
+}
+form {
+  max-width: 300px;
+}
+poster-design-element {
+  // max-width: 400px;
+  // max-height: 600px;
+  order: 2;
+  // position: absolute;
+  // margin-left: 20px;
+}
+
+vaadin-text-field {
+  width: 100%;
+}
+
+.admin-poster-layout--block {
+  padding: 20px;
+  background-color: #fff;
+  // width: 20%;
+
+  &--left {
+    @extend .admin-poster-layout--block;
+    order: 1;
+  }
+  &--center {
+    @extend .admin-poster-layout--block;
+    order: 2;
+    background-color: transparent;
+    background-color: #eee;
+
+    // width: auto;
+  }
+  &--right {
+    @extend .admin-poster-layout--block;
+    order: 3;
+  }
 }

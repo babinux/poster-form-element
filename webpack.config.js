@@ -21,7 +21,7 @@ const devPlugins = [
               <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed|KoHo|Kodchasan:400,500,600|Nova+Slim|Rationale|Satisfy&display=swap" rel="stylesheet">
               <style>
                 body{
-                  background-color: #EEE;
+                  margin: 0;
                 }
               </style>
             </head>
