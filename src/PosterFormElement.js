@@ -56,9 +56,11 @@ export class PosterFormElement extends LitElement {
 
         reflect: true,
         converter: place => {
-          console.log(`Coordinate TO ${typeof place}`);
-          console.log(place[0]);
-          console.log(this.places);
+          // console.log(`Coordinate TO ${typeof place}`);
+          // console.log(place[0]);
+          // console.log(this.places);
+          console.log(place);
+
           // return `${place[0].geometry.location
           //   .lat()
           //   .toFixed(5)}°N, ${this.places[0].geometry.location.lng().toFixed(5)}°W`;
