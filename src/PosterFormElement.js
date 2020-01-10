@@ -1,29 +1,23 @@
+/* eslint-disable lit/no-value-attribute */
 /* eslint-disable lit/binding-positions */
 import { html, LitElement } from 'lit-element';
-
-// Style Import : Main/Current Component Style
-import componentStyle from './style.scss';
 
 import 'poster-design-element';
 import '@vaadin/vaadin-date-picker';
 import '@vaadin/vaadin-text-field';
 import '@vaadin/vaadin-radio-button';
+import '@vaadin/vaadin-combo-box';
+import '@vaadin/vaadin-context-menu';
 
-// NOT SURE I NEED THAT ============================
-//
-// List : All the designs for Poster
-// const posterDesigns = ['', 'cosmic-latte', 'deep-space-blue', 'navy', 'cosmic-love', 'blackhole', 'supernova'];
+// Style Import : Main/Current Component Style
+import componentStyle from './style.scss';
 
-// Settings : color of the planets orbits based on the poster's background
+const GoogleMapsLoader = require('google-maps'); // only for common js environments
+
+GoogleMapsLoader.KEY = 'AIzaSyCq8BCifO8u5oCBMPcbZsh6Q4MySDX-4JQ';
+GoogleMapsLoader.LIBRARIES = ['places'];
+
 const posterDarkOrbits = ['2', '4'];
-// NOT SURE I NEED THAT ============================
-
-// Settings : Human readable date
-// const posterDateSettings = {
-//   year: 'numeric',
-//   month: 'long',
-//   day: 'numeric',
-// };
 
 export class PosterFormElement extends LitElement {
   static get styles() {
@@ -58,18 +52,27 @@ export class PosterFormElement extends LitElement {
         reflect: true,
       },
       posterCoordinates: {
-        type: String,
+        type: Object,
+
         reflect: true,
+        converter: place => {
+          console.log(`Coordinate TO ${typeof place}`);
+          console.log(place[0]);
+          console.log(this.places);
+          // return `${place[0].geometry.location
+          //   .lat()
+          //   .toFixed(5)}°N, ${this.places[0].geometry.location.lng().toFixed(5)}°W`;
+          return place;
+        },
       },
       posterLocation: {
         type: String,
         reflect: true,
       },
-      // ,
-      // color: {
-      //   type: String,
-      //   reflect: true
-      // }
+      color: {
+        type: String,
+        reflect: true,
+      },
     };
   }
 
@@ -92,6 +95,46 @@ export class PosterFormElement extends LitElement {
     super();
     // this.title = 'Hey there';
     // this.posterTitle = "yo man";
+    // console.log(this.shadowRoot.querySelector('vaadin-combo-box'));
+    // console.log(this.shadowRoot.querySelector('#whyNot'));
+
+    // window.customElements.whenDefined('vaadin-date-picker').then(() => {
+    //   console.log('difned ??????');
+    //   // const datepicker = this.shadowRoot.querySelector('vaadin-date-picker');
+    // });
+
+    // window.customElements.whenDefined('vaadin-combo-box').then(() => {
+    //   const comboBox = document.querySelector('vaadin-combo-box');
+    //   // const comboBox = this.shadowRoot.querySelector('vaadin-combo-box');
+    //   const span = document.querySelector('span');
+    //   const fruits = ['Apple', 'Orange', 'Banana'];
+
+    //   // console.log(this.shadowRoot.querySelector('vaadin-combo-box'));
+    //   console.log(document.querySelector('vaadin-combo-box'));
+    //   console.log(span);
+
+    //   comboBox.addEventListener('value-changed', event => {
+    //     span.textContent = event.target.value;
+    //   });
+
+    //   comboBox.itemValuePath = 'id';
+    //   comboBox.itemLabelPath = 'name';
+
+    //   comboBox.addEventListener('custom-value-set', e => {
+    //     e.preventDefault();
+
+    //     // insertProject calls an Ajax request to insert a project asynchronously
+    //     insertProject(e.detail, (newProject, allProjects) => {
+    //       comboBox.items = allProjects;
+    //       comboBox.selectedItem = newProject;
+    //     });
+    //   });
+
+    //   fetchProjects(function(projects) {
+    //     comboBox.items = projects;
+    //     comboBox.selectedItem = projects[0];
+    //   });
+    // });
 
     // Getter: URL and Params for use later
     this.url = new URL(document.location);
@@ -110,26 +153,27 @@ export class PosterFormElement extends LitElement {
   }
 
   firstUpdated() {
+    this.googleMapDom = this.shadowRoot.querySelector('#map');
+    this.googleMapDomInput = this.shadowRoot.querySelector('#map-input');
+
+    GoogleMapsLoader.load(google => {
+      this.initAutocomplete(google);
+    });
+
     this.updateUrlFromProps();
   }
 
   attributeChangedCallback(attr, oldVal, newVal) {
-    // this.color = attr === "posterDesign" ? posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white' : false;
+    super.attributeChangedCallback(attr, oldVal, newVal);
 
-    console.log('======');
-
-    // console.log(attr);
-    // console.log(this.color);
-    if (attr === 'posterdesign') {
-      this.color = posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white';
-      // console.log(this.color);
-    }
+    // if (attr === 'posterdesign') {
+    //   this.color = posterDarkOrbits.includes(this.posterDesign) ? 'black' : 'white';
+    //   // console.log(this.color);
+    // }
 
     this.updateUrlFromProps();
 
     // console.log(window.onhashchange);
-
-    super.attributeChangedCallback(attr, oldVal, newVal);
   }
 
   updatePropsFromUrl() {
@@ -209,6 +253,11 @@ export class PosterFormElement extends LitElement {
 
   render() {
     return html`
+      <!-- <script
+        type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCq8BCifO8u5oCBMPcbZsh6Q4MySDX-4JQ&libraries=places"
+      ></script> -->
+
       <style>
         #mygrid {
           display: flex;
@@ -226,14 +275,100 @@ export class PosterFormElement extends LitElement {
         }
       </style>
 
+      <style>
+        /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+        #map {
+          height: 100%;
+          /* height: 300px; */
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html,
+        body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+        #description {
+          font-family: Roboto;
+          font-size: 15px;
+          font-weight: 300;
+        }
+
+        #infowindow-content .title {
+          font-weight: bold;
+        }
+
+        #infowindow-content {
+          display: none;
+        }
+
+        #map #infowindow-content {
+          display: inline;
+        }
+
+        .pac-card {
+          margin: 10px 10px 0 0;
+          border-radius: 2px 0 0 2px;
+          box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          outline: none;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+          background-color: #fff;
+          font-family: Roboto;
+        }
+
+        #pac-container {
+          padding-bottom: 12px;
+          margin-right: 12px;
+        }
+
+        .pac-controls {
+          display: inline-block;
+          padding: 5px 11px;
+        }
+
+        .pac-controls label {
+          font-family: Roboto;
+          font-size: 13px;
+          font-weight: 300;
+        }
+
+        #map-input {
+          background-color: #fff;
+          font-family: Roboto;
+          font-size: 15px;
+          font-weight: 300;
+          margin-left: 12px;
+          padding: 0 11px 0 13px;
+          text-overflow: ellipsis;
+          width: 400px;
+        }
+
+        #map-input:focus {
+          border-color: #4d90fe;
+        }
+
+        #title {
+          color: #fff;
+          background-color: #4d90fe;
+          font-size: 25px;
+          font-weight: 500;
+          padding: 6px 12px;
+        }
+        #target {
+          width: 345px;
+        }
+      </style>
+
       <div id="mygrid">
         <poster-design-element
           postertitle="${this.posterTitle}"
           postersubtitle="${this.posterSubtitle}"
           posterlocation="${this.posterLocation}"
           postercoordinates="${this.posterCoordinates}"
-          posterdesign="${this.posterDesign}"
           posterdate="${this.posterDate}"
+          posterdesign="${this.posterDesign}"
         >
         </poster-design-element>
 
@@ -243,6 +378,73 @@ export class PosterFormElement extends LitElement {
           data-property_name="Settings"
           class="posterFormContainer"
         >
+          <div class="info-design-container">
+            <div>
+              <div>
+                <input
+                  id="map-input"
+                  class="controls"
+                  type="text"
+                  placeholder="Place | City | Country"
+                  data-property_name="posterLocation"
+                  value="${this.posterLocation}"
+                  @input="${this.onInputChange}"
+                />
+              </div>
+              <!-- <div style="height: 300px;">
+                <div id="map"></div>
+              </div> -->
+            </div>
+            <!-- <vaadin-combo-box
+              label="Location"
+              placeholder="${this.posterTitle}"
+              value="nice"
+              id="whyNot"
+            ></vaadin-combo-box>
+
+            <google-map fit-to-markers api-key="AIzaSyCq8BCifO8u5oCBMPcbZsh6Q4MySDX-4JQ">
+              <google-map-marker
+                latitude="37.78"
+                longitude="-122.4"
+                draggable="true"
+              ></google-map-marker>
+            </google-map>
+
+            <google-map-search map="[[map]]" query="Pizza" results="{{results}}">
+            </google-map-search>
+            <google-map map="{{map}}" latitude="37.779" longitude="-122.3892">
+              <template is="dom-repeat" items="{{results}}" as="marker">
+                <google-map-marker latitude="{{marker.latitude}}" longitude="{{marker.longitude}}">
+                  <h2>{{marker.name}}</h2>
+                  <span>{{marker.formatted_address}}</span>
+                </google-map-marker>
+              </template>
+            </google-map>
+
+            <vaadin-context-menu>
+              <p>This paragraph has the context menu provided in the renderer function below.</p>
+              <p>
+                Another paragraph with the context menu that can be opened with
+                <b>right click</b> or with <b>long touch.</b>
+              </p>
+            </vaadin-context-menu>
+
+            <template is="dom-bind">
+              <google-map-search map="[[map]]" query="Pizza" results="{{results}}">
+              </google-map-search>
+              <google-map map="{{map}}" latitude="37.779" longitude="-122.3892">
+                <template is="dom-repeat" items="{{results}}" as="marker">
+                  <google-map-marker
+                    latitude="{{marker.latitude}}"
+                    longitude="{{marker.longitude}}"
+                  >
+                    <h2>{{marker.name}}</h2>
+                    <span>{{marker.formatted_address}}</span>
+                  </google-map-marker>
+                </template>
+              </google-map>
+            </template> -->
+          </div>
           <div class="info-design-container">
             <label for="mySubtitle" class="">
               #1 Select Your Design
@@ -326,8 +528,6 @@ export class PosterFormElement extends LitElement {
                 </label>
 
                 <label class="theme-selection-radio w-radio">
-                  <!-- <input type="radio" id="deep-space-blue" name="Design" value="deep-space-blue"
-                data-property_name="Design" class="design-radio-button w-radio-input" /> -->
                   <input
                     type="radio"
                     id="deep-space-blue"
@@ -427,22 +627,25 @@ export class PosterFormElement extends LitElement {
             </div>
           </div>
           <div class="info-design-container">
-            <!--
+            <label for="mySubtitle" class="">
+              #2 Location
+            </label>
 
-      <label for="mySubtitle" class="">
-        #2 Location
-      </label>
+            <label for="Location-3" class="app-menu-label sub-label">
+              Location / Place / City
+            </label>
 
-
-      <label for="Location-3" class="app-menu-label sub-label">
-        Location / Place / City
-      </label>
-
-      // eslint-disable-next-line lit/binding-positions
-      // eslint-disable-next-line lit/binding-positions
-      <input value="${this.posterLocation}" @input="${this
-              .onInputChange}" type="text" class="" name="posterLocation"
-        data-property_name="posterLocation" placeholder="Choose Location" id="posterLocation" required="" /> -->
+            <input
+              .value="${this.posterSubtitle}"
+              @input="${this.onInputChange}"
+              type="text"
+              class=""
+              name="posterSubtitle"
+              data-property_name="posterSubtitle"
+              placeholder="Choose Location"
+              id="posterSubtitle"
+              required=""
+            />
 
             <vaadin-text-field
               @input="${this.onInputChange}"
@@ -570,6 +773,29 @@ export class PosterFormElement extends LitElement {
         </form>
       </div>
     `;
+  }
+  // This example adds a search box to a map, using the Google Place Autocomplete
+  // feature. People can enter geographical searches. The search box will return a
+  // pick list containing a mix of places and predicted search terms.
+
+  // This example requires the Places library. Include the libraries=places
+  // parameter when you first load the API. For example:
+  // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+  initAutocomplete(google) {
+    const input = this.googleMapDomInput;
+    const searchBox = new google.maps.places.SearchBox(input);
+    searchBox.addListener('places_changed', () => {
+      this.places = searchBox.getPlaces();
+      if (this.places.length === 0) {
+        return;
+      }
+      this.posterLocation = this.places[0].formatted_address;
+      const superman = `${this.places[0].geometry.location
+        .lat()
+        .toFixed(5)}°N, ${this.places[0].geometry.location.lng().toFixed(5)}°W`;
+      this.setAttribute('posterCoordinates', superman);
+    });
   }
 }
 window.customElements.define('poster-form-element', PosterFormElement);
