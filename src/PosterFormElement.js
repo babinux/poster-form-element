@@ -22,7 +22,7 @@ const posterDarkOrbits = ['2', '4'];
 // const posterDateSettings = {
 //   year: 'numeric',
 //   month: 'long',
-//   day: 'numeric'
+//   day: 'numeric',
 // };
 
 export class PosterFormElement extends LitElement {
@@ -33,26 +33,20 @@ export class PosterFormElement extends LitElement {
   static get properties() {
     return {
       posterDesign: {
-        type: String,
+        type: Number,
         reflect: true,
       },
       posterDate: {
-        type: Object,
+        // type: String,
         reflect: true,
         // ,
         // converter(value) {
         //   return new Date(value);
         // }
       },
-      posterFormatedDate: {
-        type: String,
-        // reflect: true,
-        // converter() {
-        //   return new Date(this.posterDate).toLocaleDateString('en-EN', posterDateSettings);
-        // }
-      },
+
       posterPrint: {
-        type: String,
+        type: Number,
         reflect: true,
       },
       posterTitle: {
@@ -174,7 +168,6 @@ export class PosterFormElement extends LitElement {
             : new Date(),
         )
       : new Date();
-    this.posterFormatedDate = this.posterDate;
   }
 
   updateUrlFromProps() {
@@ -184,51 +177,35 @@ export class PosterFormElement extends LitElement {
     // this.posterParams.set("color", this.color);
     this.posterParams.set('posterSize', '9x12');
 
-    this.posterParams.set('posterPrint', this.posterPrint);
-    this.posterParams.set('posterDesign', this.posterDesign);
-    this.posterParams.set(
-      'posterDate',
-      `${this.posterDate.getFullYear()}-${this.posterDate.toLocaleString('default', {
-        month: 'short',
-      })}-${this.posterDate.getDate()}`,
-    );
-    this.posterParams.set('posterTitle', this.posterTitle);
+    // this.posterParams.set('posterPrint', this.posterPrint);
+    // this.posterParams.set('posterDesign', this.posterDesign);
+    // this.posterParams.set(
+    //   'posterDate',
+    //   `${this.posterDate.getFullYear()}-${this.posterDate.toLocaleString('default', {
+    //     month: 'short',
+    //   })}-${this.posterDate.getDate()}`,
+    // );
+    // this.posterParams.set('posterTitle', this.posterTitle);
     // this.posterParams.set("posterSubtitle", this.posterSubtitle);
-    this.posterParams.set('posterLocation', this.posterLocation);
-    this.posterParams.set('posterCoordinates', this.posterCoordinates);
+    // this.posterParams.set('posterLocation', this.posterLocation);
+    // this.posterParams.set('posterCoordinates', this.posterCoordinates);
 
-    window.history.replaceState({}, 'Updating poster Design', `?${this.posterParams.toString()}`);
+    // window.history.replaceState({}, 'Updating poster Design', `?${this.posterParams.toString()}`);
   }
 
   onInputChange(event) {
     const input = event.target || event.srcElement;
-    console.log(input);
-    // console.log(caller.name);
-    // console.log(caller.id);
-    console.log(input.getAttribute('data-property_name'));
-    console.log(input.value);
 
     if (input.getAttribute('data-property_name') === 'posterDate') {
-      console.log(input.getAttribute('data-property_name'));
-      console.log('+-----+');
+      console.log('Date Update ------>');
 
-      this[input.getAttribute('data-property_name')] = new Date(input.value);
-      console.log(this[input.getAttribute('data-property_name')]);
-      console.log(this.posterDate);
-      console.log('+++++');
-
-      console.log(this.posterFormatedDate);
-
-      this.posterFormatedDate = this.posterDate;
-      console.log(this.posterFormatedDate);
+      this[input.getAttribute('data-property_name')] = input.value;
+      // this[input.getAttribute('data-property_name')] = new Date(input.value);
+      // this.posterFormatedDate = this.posterDate;
     } else {
       this[input.getAttribute('data-property_name')] = input.value;
     }
   }
-
-  // get inputEl() {
-  //   return this.shadowRoot.getElementById('name');
-  // }
 
   render() {
     return html`
@@ -256,9 +233,7 @@ export class PosterFormElement extends LitElement {
           posterlocation="${this.posterLocation}"
           postercoordinates="${this.posterCoordinates}"
           posterdesign="${this.posterDesign}"
-          color="${this.color}"
           posterdate="${this.posterDate}"
-          posterformateddate="${this.posterFormatedDate}"
         >
         </poster-design-element>
 
@@ -479,139 +454,33 @@ export class PosterFormElement extends LitElement {
             </vaadin-text-field>
           </div>
           <div class="info-design-container">
-            <!-- <dom-module id="custom-date-picker-test" theme-for="vaadin-date-picker">
-            <template>
-              <style>
-                :host([theme~="custom"]) {
-                  font-family: monospace;
-                        /* opacity: 0; */
-                        position: absolute;
-                        width: 100%;
-                        height: 100%;
-                        left: 0;
-                        top: 0;
-                        display: block;
-                        background-color: transparent;
-                  /* background-color: cyan; */
-                }
-              </style>
-            </template>
-          </dom-module> -->
+            <dom-module id="custom-date-picker-testme" theme-for="vaadin-date-picker">
+              <template>
+                <style>
+                  :host([theme~='custom']) {
+                    font-family: monospace;
+                    /* opacity: 0; */
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    left: 0;
+                    top: 0;
+                    display: block;
+                    background-color: transparent;
+                    /* background-color: cyan; */
+                  }
+                </style>
+              </template>
+            </dom-module>
             <vaadin-date-picker
               theme="custom2"
               @change="${this.onInputChange}"
               data-property_name="posterDate"
               label="#3 Date"
               placeholder="Pick a date"
-              value="${this.posterDate}"
+              .value="${this.posterDate}"
             >
             </vaadin-date-picker>
-
-            <!--
-        <div class="div-block-47"><select id="Day" name="Day" data-property_name="Day" required=""
-            class="field-day app-menu-text-field w-select">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-            <option value="15">15</option>
-            <option value="16">16</option>
-            <option value="17">17</option>
-            <option value="18">18</option>
-            <option value="19">19</option>
-            <option value="20">20</option>
-            <option value="21">21</option>
-            <option value="22">22</option>
-            <option value="23">23</option>
-            <option value="24">24</option>
-            <option value="25">25</option>
-            <option value="26">26</option>
-            <option value="27">27</option>
-            <option value="28">28</option>
-            <option value="29">29</option>
-            <option value="30">30</option>
-            <option value="31">31</option>
-          </select><select id="Month" name="Month" data-property_name="Month" required=""
-            class="app-menu-text-field field-month w-select">
-            <option value="0">January</option>
-            <option value="1">February</option>
-            <option value="2">March</option>
-            <option value="3">April</option>
-            <option value="4">May</option>
-            <option value="5">June</option>
-            <option value="6">July</option>
-            <option value="7">August</option>
-            <option value="8">September</option>
-            <option value="9">October</option>
-            <option value="10">November</option>
-            <option value="11">December</option>
-          </select><select id="Year" name="Year" data-property_name="Year" required=""
-            class="field-year app-menu-text-field w-select">
-            <option value="1970">1970</option>
-            <option value="1971">1971</option>
-            <option value="1972">1972</option>
-            <option value="1973">1973</option>
-            <option value="1974">1974</option>
-            <option value="1975">1975</option>
-            <option value="1976">1976</option>
-            <option value="1977">1977</option>
-            <option value="1978">1978</option>
-            <option value="1979">1979</option>
-            <option value="1980">1980</option>
-            <option value="1981">1981</option>
-            <option value="1982">1982</option>
-            <option value="1983">1983</option>
-            <option value="1984">1984</option>
-            <option value="1985">1985</option>
-            <option value="1986">1986</option>
-            <option value="1987">1987</option>
-            <option value="1988">1988</option>
-            <option value="1989">1989</option>
-            <option value="1990">1990</option>
-            <option value="1991">1991</option>
-            <option value="1992">1992</option>
-            <option value="1993">1993</option>
-            <option value="1994">1994</option>
-            <option value="1995">1995</option>
-            <option value="1996">1996</option>
-            <option value="1997">1997</option>
-            <option value="1998">1998</option>
-            <option value="1999">1999</option>
-            <option value="2001">2000</option>
-            <option value="2001">2001</option>
-            <option value="2002">2002</option>
-            <option value="2003">2003</option>
-            <option value="2004">2004</option>
-            <option value="2005">2005</option>
-            <option value="2006">2006</option>
-            <option value="2007">2007</option>
-            <option value="2008">2008</option>
-            <option value="2009">2009</option>
-            <option value="2010">2010</option>
-            <option value="2011">2011</option>
-            <option value="2012">2012</option>
-            <option value="2013">2013</option>
-            <option value="2014">2014</option>
-            <option value="2015">2015</option>
-            <option value="2016">2016</option>
-            <option value="2017">2017</option>
-            <option value="2018">2018</option>
-            <option value="2019">2019</option>
-            <option value="2020">2020</option>
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-          </select></div>
-      </div> -->
           </div>
 
           <div class="info-design-container">
