@@ -18,41 +18,56 @@ const GoogleMapsLoader = require('google-maps'); // only for common js environme
 GoogleMapsLoader.KEY = 'AIzaSyCq8BCifO8u5oCBMPcbZsh6Q4MySDX-4JQ';
 GoogleMapsLoader.LIBRARIES = ['places'];
 
+const posterSizes = [
+  {
+    id: `size-9x12-US`,
+    title: `9" x 12"`,
+  },
+  {
+    id: `size-12x16-US`,
+    title: `12"x 16"`,
+  },
+  {
+    id: `size-18x24-US`,
+    title: `18"x 24"`,
+  },
+];
+
 const posterDesigns = [
   {
-    id: 'cosmic-latte',
-    color: 'black',
-    title: 'Cosmic Latte',
+    id: `cosmic-latte`,
+    color: `black`,
+    title: `Cosmic Latte`,
   },
   {
-    id: 'deep-space-blue',
-    color: 'white',
-    title: 'Deep Space Blue',
+    id: `deep-space-blue`,
+    color: `white`,
+    title: `Deep Space Blue`,
   },
   {
-    id: 'navy',
-    color: 'white',
-    title: 'Navy',
+    id: `navy`,
+    color: `white`,
+    title: `Navy`,
   },
   {
-    id: 'cosmic-love',
-    color: 'white',
-    title: 'Cosmic Love',
+    id: `cosmic-love`,
+    color: `white`,
+    title: `Cosmic Love`,
   },
   {
-    id: 'blackhole',
-    color: 'white',
-    title: 'Blackhole',
+    id: `blackhole`,
+    color: `white`,
+    title: `Blackhole`,
   },
   {
-    id: 'supernova',
-    color: 'white',
-    title: 'Supernova',
+    id: `supernova`,
+    color: `white`,
+    title: `Supernova`,
   },
   {
-    id: 'milk-drop',
-    color: 'white',
-    title: 'Milk Drop',
+    id: `milk-drop`,
+    color: `white`,
+    title: `Milk Drop`,
   },
 ];
 
@@ -257,13 +272,13 @@ export class PosterFormElement extends LitElement {
             <div class="info-design-container">
 
 
-              <vaadin-radio-group id="bla"
+              <vaadin-radio-group
                 label="Poster Design Groupe"
                 required
                 error-message="Please select a design"
                 @click="${this.onInputChange}"
               >
-                 <legend>Select Design</legend>
+
                 ${posterDesigns.map(
                   (design, index) => html`
                     <vaadin-radio-button
@@ -271,8 +286,6 @@ export class PosterFormElement extends LitElement {
                       value="${index}"
                       name="design-${design.id}"
                       data-property_name="posterDesign"
-                      @change="${this.onInputChange}"
-                      @input="${this.onInputChange}"
                       ?checked=${index === Number(this.posterDesign)}
                     >
                       ${design.title}
@@ -359,62 +372,29 @@ export class PosterFormElement extends LitElement {
           </div>
           <div class="admin-poster-layout--block--right">
             <div class="info-design-container">
-              <label for="" class="">
-                #5 Select Size
-              </label>
 
-              <div class="div-block-45">
-                <div class="div-block-63">
-                  <label data-size="9x12" class="size-selection-radio w-radio">
-                    <input
-                      type="radio"
-                      id="size-9x12-US"
-                      name="Size"
-                      value="size-9x12-US"
-                      data-property_name="posterSize"
-                      @input="${this.onInputChange}"
-                      class="size-radio-select w-radio-input"
-                    /><span
-                      for="size-9x12-US"
-                      class="size-radio-button-label label-8x10 w-form-label"
-                      >9" x 12"<br
-                    /></span>
-                  </label>
+             <vaadin-radio-group
+                label="Poster Size"
+                required
+                error-message="Please select poster size"
 
-                  <label data-size="12x16" class="size-selection-radio w-radio">
-                    <input
-                      type="radio"
-                      id="size-12x16-US"
-                      name="Size"
-                      value="size-12x16-US"
+              >
+                ${posterSizes.map(
+                  size => html`
+                    <vaadin-radio-button
+                      id="radio--${size.id}"
+                      value="${size.id}"
+                      name="size-${size.id}"
                       data-property_name="posterSize"
-                      @input="${this.onInputChange}"
-                      class="size-radio-select w-radio-input"
-                    /><span
-                      for="size-12x16-US"
-                      class="size-radio-button-label label-12x16 w-form-label"
-                      >12"x 16"<br
-                    /></span>
-                  </label>
+                      ?checked=${size.id === this.posterSize}
+                      @click="${this.onInputChange}"
+                    >
+                      ${size.title}
+                    </vaadin-radio-button>
+                  `,
+                )}
 
-                  <label data-size="18x24" class="size-selection-radio w-radio">
-                    <input
-                      type="radio"
-                      id="size-18x24-US"
-                      name="Size"
-                      value="size-18x24-US"
-                      data-property_name="posterSize"
-                      @input="${
-                        this.onInputChange
-                      }"                      class="size-radio-select w-radio-input"
-                    /><span
-                      for="size-18x24-US"
-                      class="size-radio-button-label label-18x24 w-form-label"
-                      >18"x 24"<br
-                    /></span>
-                  </label>
-                </div>
-              </div>
+              </vaadin-radio-group>
             </div>
           </div>
         </div>
