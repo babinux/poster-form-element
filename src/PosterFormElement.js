@@ -20,15 +20,15 @@ GoogleMapsLoader.LIBRARIES = ['places'];
 
 const posterSizes = [
   {
-    id: `size-9x12-US`,
+    id: `9x12-US`,
     title: `9" x 12"`,
   },
   {
-    id: `size-12x16-US`,
+    id: `12x16-US`,
     title: `12"x 16"`,
   },
   {
-    id: `size-18x24-US`,
+    id: `18x24-US`,
     title: `18"x 24"`,
   },
 ];
@@ -154,7 +154,7 @@ export class PosterFormElement extends LitElement {
   }
 
   firstUpdated() {
-    this.googleMapDom = this.shadowRoot.querySelector('#map');
+    // this.googleMapDom = this.shadowRoot.querySelector('#map');
     this.googleMapDomInput = this.shadowRoot.querySelector('#map-input');
 
     GoogleMapsLoader.load(google => {
@@ -198,6 +198,9 @@ export class PosterFormElement extends LitElement {
     this.posterDesign = this.posterParams.has('posterDesign')
       ? this.posterParams.get('posterDesign')
       : '1';
+    this.posterSize = this.posterParams.has('posterSize')
+      ? this.posterParams.get('posterSize')
+      : posterSizes[0].id;
     // eslint-disable-next-line no-nested-ternary
     this.color = this.posterParams.has('color')
       ? this.posterParams.get('color')
@@ -220,7 +223,7 @@ export class PosterFormElement extends LitElement {
     this.posterParams = new URLSearchParams(this.url.search);
 
     // this.posterParams.set('posterSize', '9x12');
-    console.log(`update Url FromProps ------>${this.posterSize}`);
+    // console.log(`update Url FromProps ------>${this.posterSize}`);
 
     this.posterParams.set('posterSize', this.posterSize);
 
@@ -229,25 +232,27 @@ export class PosterFormElement extends LitElement {
 
   onInputChange(event) {
     const input = event.target || event.srcElement;
-
     console.log(`input changed`);
+
     if (input.getAttribute('data-property_name') === 'posterDate') {
       // console.log('Date Update ------>');
 
       this[input.getAttribute('data-property_name')] = input.value;
       // this[input.getAttribute('data-property_name')] = new Date(input.value);
       // this.posterFormatedDate = this.posterDate;
-    } else if (input.getAttribute('data-property_name') === 'posterSize') {
-      // console.log(`prop ------>${input.getAttribute('data-property_name')}`);
-      // console.log(`INPUT  val ------>${input.value}`);
-      // this.posterSize = 'abc';
-      this.posterSize = input.value;
-      // console.log(`POSTER SIZE  val ------>${this.posterSize}`);
+    }
+    // else if (input.getAttribute('data-property_name') === 'posterSize') {
+    //   // console.log(`prop ------>${input.getAttribute('data-property_name')}`);
+    //   // console.log(`INPUT  val ------>${input.value}`);
+    //   // this.posterSize = 'abc';
+    //   this.posterSize = input.value;
+    //   // console.log(`POSTER SIZE  val ------>${this.posterSize}`);
 
-      // this[input.getAttribute('data-property_name')] = input.value;
-      // this.posterParams.set('posterSize', input.value);
-      this.updateUrlFromProps();
-    } else {
+    //   // this[input.getAttribute('data-property_name')] = input.value;
+    //   // this.posterParams.set('posterSize', input.value);
+    //   this.updateUrlFromProps();
+    // }
+    else {
       // this[input.getAttribute('data-property_name')] = input.value;
       this.setAttribute(input.getAttribute('data-property_name'), input.value);
       this.updateUrlFromProps();
@@ -273,7 +278,7 @@ export class PosterFormElement extends LitElement {
 
 
               <vaadin-radio-group
-                label="Poster Design Groupe"
+                label="#1 Poster Design"
                 required
                 error-message="Please select a design"
                 @click="${this.onInputChange}"
@@ -283,10 +288,10 @@ export class PosterFormElement extends LitElement {
                   (design, index) => html`
                     <vaadin-radio-button
                       id="radio--${design.id}"
-                      value="${index}"
+                      value="${index + 1}"
                       name="design-${design.id}"
                       data-property_name="posterDesign"
-                      ?checked=${index === Number(this.posterDesign)}
+                      ?checked=${index + 1 === Number(this.posterDesign)}
                     >
                       ${design.title}
                     </vaadin-radio-button>
@@ -331,11 +336,12 @@ export class PosterFormElement extends LitElement {
                 </template>
               </dom-module>
               <vaadin-date-picker
-                theme="custom2"
+                theme="custom-form"
                 @change="${this.onInputChange}"
                 data-property_name="posterDate"
                 label="#3 Date"
                 placeholder="Pick a date"
+                initial-position="1990-01-01"
                 .value="${this.posterDate}"
               >
               </vaadin-date-picker>
@@ -346,7 +352,7 @@ export class PosterFormElement extends LitElement {
                 id="map-input"
                 class="controls"
                 type="text"
-                label="#2 Location"
+                label="#4 Location"
                 placeholder="Place | City | Country"
                 data-property_name="posterLocation"
                 value="${this.posterLocation}"
@@ -374,7 +380,7 @@ export class PosterFormElement extends LitElement {
             <div class="info-design-container">
 
              <vaadin-radio-group
-                label="Poster Size"
+                label="#5 Poster Size"
                 required
                 error-message="Please select poster size"
 
