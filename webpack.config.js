@@ -22,7 +22,7 @@ const htmlTemplate = environmentProduction => `
                 <poster-form-element></poster-form-element>
                ${
                  environmentProduction
-                   ? '<script defer src="vendors~index.js.br?inProd"></script>'
+                   ? '<script defer src="vendors~index.js?inProd"></script>'
                    : '<script defer src="vendors~index.js?inDev"></script>'
                }
 
