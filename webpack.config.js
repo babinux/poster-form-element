@@ -8,7 +8,7 @@ const path = require('path'),
   // eslint-disable-next-line no-unused-vars
   UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-const htmlTemplate = environmentProduction => `
+const htmlTemplate = isProduction => `
       <!DOCTYPE html>
           <html>
             <head>
@@ -22,7 +22,7 @@ const htmlTemplate = environmentProduction => `
             <body>
                 <poster-form-element></poster-form-element>
                ${
-                 environmentProduction
+                 isProduction
                    ? '<script defer src="vendors~index.js?inProd"></script>'
                    : '<script defer src="vendors~index.js?inDev"></script>'
                }
