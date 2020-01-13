@@ -7,14 +7,47 @@ const path = require('path'),
 
 const CompressionPlugin = require('compression-webpack-plugin');
 
-const isProd = process.env.NODE_ENV === 'production';
+module.exports = (env, argv) => {
+  let isProd;
 
-/**
- * Plugins for dev environment
- */
-const devPlugins = [
-  new WebpackIndexHTMLPlugin({
-    template: () => `
+  console.log(argv.mode);
+  process.env.NODE_ENV = argv.mode;
+
+  if (process.env.NODE_ENV === 'production') {
+    console.log('Looks like we are in Production mode!');
+    isProd = true;
+  } else {
+    console.log('Looks like we are in development mode!');
+    process.env.NODE_ENV = 'development';
+    isProd = false;
+  }
+
+  /**
+   * Plugins for dev environment
+   */
+  const devPlugins = [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.DEBUG': JSON.stringify(process.env.DEBUG),
+      __ENV__: JSON.stringify(process.env.NODE_ENV || 'development'),
+    }),
+    new WebpackIndexHTMLPlugin({
+      minify: {
+        removeComments: isProd,
+        collapseWhitespace: isProd,
+        html5: true,
+        minifyCSS: true,
+        minifyJS: true,
+        minifyURLs: false,
+        removeAttributeQuotes: true,
+        removeEmptyAttributes: true,
+        removeOptionalTags: true,
+        removeRedundantAttributes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributese: true,
+        useShortDoctype: true,
+      },
+      template: () => `
       <!DOCTYPE html>
           <html>
             <head>
@@ -27,112 +60,37 @@ const devPlugins = [
             </head>
             <body>
                 <poster-form-element></poster-form-element>
-                <script defer src="vendors~index.js"></script>
+               ${
+                 isProd
+                   ? '<script defer src="vendors~index.js"></script>'
+                   : '<script defer src="vendors~index.js"></script>'
+               }
 
             </body>
           </html>
       `,
-  }),
-  new webpack.DefinePlugin({
-    __ENV__: JSON.stringify(process.env.NODE_ENV || 'development'),
-  }),
-];
-/**
- * Plugins for production environment
- */
-const prodPlugins = [
-  new CleanWebpackPlugin({
-    verbose: true,
-  }),
-  new CompressionPlugin({
-    filename: '[path].br[query]',
-    algorithm: 'brotliCompress',
-    test: /\.(js|css|html|svg)$/,
-    compressionOptions: {
-      level: 11,
-    },
-    threshold: 10240,
-    minRatio: 0.8,
-    deleteOriginalAssets: false,
-  }),
-  new TerserPlugin({
-    extractComments: true,
-    cache: true,
-    parallel: true,
-    sourceMap: false, // Must be set to true if using source-maps in production
-    terserOptions: {
-      // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
-    },
-  }),
-  new WebpackIndexHTMLPlugin({
-    minify: true,
-  }),
-];
-/**
- * Merging plugins on the basis of env
- */
-const pluginList = isProd ? [...devPlugins, ...prodPlugins] : devPlugins;
+    }),
+  ];
+  /**
+   * Plugins for production environment
+   */
+  const prodPlugins = [
+    new CleanWebpackPlugin(),
+    new CompressionPlugin({
+      filename: '[path].br[query]',
+      algorithm: 'brotliCompress',
+      test: /\.(js|css|html|svg)$/,
+      compressionOptions: {
+        level: 11,
+      },
+      threshold: 10240,
+      minRatio: 0.8,
+      deleteOriginalAssets: true ? isProd : !isProd,
+    }),
+  ];
 
-module.exports = {
-  devtool: isProd ? '' : 'inline-source-map',
-  entry: {
-    index: path.resolve(__dirname, './index.js'),
-    // vendors: path.resolve(__dirname, './dist/vendors.js'),
-  },
-  output: {
-    path: path.resolve(__dirname, './dist'),
-    filename: isProd ? '[name].[chunkhash].js' : '[name].js',
-    chunkFilename: '[name].js',
-    publicPath: path.resolve(__dirname, '/'),
-  },
-  devServer: {
-    contentBase: './dist',
-  },
-  performance: {
-    hints: 'warning',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.css|\.s(c|a)ss$/,
-        use: [
-          {
-            loader: 'lit-scss-loader',
-            options: {
-              minify: true, // defaults to false
-            },
-          },
-          'extract-loader',
-          'css-loader',
-          'sass-loader',
-        ],
-      },
-      // {
-      //   test: /\.svg$/,
-      //   use: [
-      //     {
-      //       loader: 'svg-url-loader',
-      //       options: {},
-      //     },
-      //   ],
-      // },
-      {
-        test: /\.(png|jpg|gif|svg)$/,
-        use: ['file-loader'],
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: ['file-loader'],
-      },
-    ],
-  },
-  plugins: pluginList,
-  optimization: {
+  const commonOptimizations = {
+    minimize: isProd,
     splitChunks: {
       chunks: 'all',
       cacheGroups: {
@@ -144,8 +102,115 @@ module.exports = {
         },
       },
     },
-    // runtimeChunk: {
-    //   name: 'runtime'
-    // }
-  },
+  };
+
+  const devOptimizations = {
+    ...commonOptimizations,
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false,
+        cache: false,
+        sourceMap: true, // Must be set to true if using source-maps in production
+        terserOptions: {
+          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+        },
+      }),
+    ],
+  };
+
+  const prodOptimizations = {
+    ...commonOptimizations,
+    minimizer: [
+      new TerserPlugin({
+        extractComments: 'all',
+        cache: true,
+        sourceMap: false, // Must be set to true if using source-maps in production
+        terserOptions: {
+          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+        },
+      }),
+    ],
+  };
+
+  /**
+   * Merging plugins on the basis of env
+   */
+  const pluginList = isProd ? [...devPlugins, ...prodPlugins] : devPlugins;
+
+  const optimizationList = isProd ? { ...prodOptimizations } : { ...devOptimizations };
+
+  console.log('Build Mode:');
+  console.log(isProd);
+
+  console.log('Modules:');
+  console.log(module.exports);
+
+  console.log('Optimization List:');
+
+  console.log(optimizationList);
+
+  console.log(module.exports.optimization);
+
+  return {
+    devtool: isProd ? '' : 'inline-source-map',
+    entry: {
+      index: path.resolve(__dirname, './index.js'),
+      // vendors: path.resolve(__dirname, './dist/vendors.js'),
+    },
+    output: {
+      path: path.resolve(__dirname, './dist'),
+      filename: isProd ? '[name].js' : '[name].js',
+      chunkFilename: '[name].js',
+      publicPath: path.resolve(__dirname, '/'),
+    },
+    devServer: {
+      contentBase: './dist',
+    },
+    performance: {
+      hints: 'warning',
+    },
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          loader: 'babel-loader',
+          exclude: /node_modules/,
+        },
+        {
+          test: /\.css|\.s(c|a)ss$/,
+          use: [
+            {
+              loader: 'lit-scss-loader',
+              options: {
+                minify: true, // defaults to false
+              },
+            },
+            'extract-loader',
+            'css-loader',
+            'sass-loader',
+          ],
+        },
+
+        {
+          test: /\.(png|jpg|gif|svg)$/,
+          use: ['file-loader'],
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/,
+          use: ['file-loader'],
+        },
+        // {
+        //   test: /\.svg$/,
+        //   use: [
+        //     {
+        //       loader: 'svg-url-loader',
+        //       options: {},
+        //     },
+        //   ],
+        // },
+      ],
+    },
+    plugins: pluginList,
+    optimization: optimizationList,
+  };
 };

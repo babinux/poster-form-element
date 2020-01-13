@@ -37,12 +37,12 @@ const posterDesigns = [
   {
     id: `cosmic-latte`,
     color: `black`,
-    title: `Cosmic Latte`,
+    title: `Black Tea`,
   },
   {
     id: `deep-space-blue`,
     color: `white`,
-    title: `Deep Space Blue`,
+    title: `Cosmic Latte`,
   },
   {
     id: `navy`,
@@ -67,7 +67,7 @@ const posterDesigns = [
   {
     id: `milk-drop`,
     color: `white`,
-    title: `Milk Drop`,
+    title: `Milkyway`,
   },
 ];
 
@@ -191,7 +191,7 @@ export class PosterFormElement extends LitElement {
       : '';
     this.posterLocation = this.posterParams.has('posterLocation')
       ? this.posterParams.get('posterLocation')
-      : 'Amazing Place, World Country';
+      : '';
     this.posterCoordinates = this.posterParams.has('posterCoordinates')
       ? this.posterParams.get('posterCoordinates')
       : '00.00000°N -000.00000°W';
