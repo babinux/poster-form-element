@@ -5,6 +5,7 @@ const path = require('path'),
   { CleanWebpackPlugin } = require('clean-webpack-plugin'),
   TerserPlugin = require('terser-webpack-plugin'),
   CompressionPlugin = require('compression-webpack-plugin'),
+  // eslint-disable-next-line no-unused-vars
   UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const htmlTemplate = environmentProduction => `
@@ -123,7 +124,7 @@ module.exports = (env, argv) => {
   const prodOptimizations = {
     ...commonOptimizations,
     minimizer: [
-      new UglifyJsPlugin(),
+      // new UglifyJsPlugin(),
       new TerserPlugin({
         extractComments: 'all',
         cache: !isProd,
