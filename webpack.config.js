@@ -46,6 +46,24 @@ module.exports = (env, argv) => {
   }
 
   /**
+   * Plugins for production environment
+   */
+  const prodPlugins = [
+    new CleanWebpackPlugin(),
+    new CompressionPlugin({
+      filename: '[path].br[query]',
+      algorithm: 'brotliCompress',
+      test: /\.(js|css|html|svg)$/,
+      compressionOptions: {
+        level: 11,
+      },
+      threshold: 10240,
+      minRatio: 0.8,
+      deleteOriginalAssets: false ? isProd : !isProd,
+    }),
+  ];
+
+  /**
    * Plugins for dev environment
    */
   const devPlugins = [
@@ -73,24 +91,10 @@ module.exports = (env, argv) => {
       template: () => htmlTemplate(isProd),
     }),
   ];
-  /**
-   * Plugins for production environment
-   */
-  const prodPlugins = [
-    new CleanWebpackPlugin(),
-    new CompressionPlugin({
-      filename: '[path].br[query]',
-      algorithm: 'brotliCompress',
-      test: /\.(js|css|html|svg)$/,
-      compressionOptions: {
-        level: 11,
-      },
-      threshold: 10240,
-      minRatio: 0.8,
-      deleteOriginalAssets: false ? isProd : !isProd,
-    }),
-  ];
 
+  /**
+   * Common Optimization for all environment
+   */
   const commonOptimizations = {
     minimize: isProd,
     splitChunks: {
@@ -106,27 +110,16 @@ module.exports = (env, argv) => {
     },
   };
 
-  const devOptimizations = {
-    ...commonOptimizations,
-    minimizer: [
-      new TerserPlugin({
-        extractComments: false,
-        cache: false,
-        sourceMap: true, // Must be set to true if using source-maps in production
-        terserOptions: {
-          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
-        },
-      }),
-    ],
-  };
-
+  /**
+   * Production Optimization for Prod environment
+   */
   const prodOptimizations = {
     ...commonOptimizations,
     minimizer: [
       new TerserPlugin({
         extractComments: 'all',
-        cache: true,
-        sourceMap: false, // Must be set to true if using source-maps in production
+        cache: !isProd,
+        sourceMap: !isProd,
         terserOptions: {
           // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
         },
@@ -135,22 +128,34 @@ module.exports = (env, argv) => {
   };
 
   /**
-   * Merging plugins on the basis of env
+   * Default|Development Optimization for Dev environment
+   */
+  const devOptimizations = {
+    ...commonOptimizations,
+    minimizer: [
+      new TerserPlugin({
+        extractComments: !isProd,
+        cache: !isProd,
+        sourceMap: !isProd,
+        terserOptions: {
+          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+        },
+      }),
+    ],
+  };
+
+  /**
+   * Merging plugins and Optimization on the basis of env
    */
   const pluginList = isProd ? [...devPlugins, ...prodPlugins] : devPlugins;
-
   const optimizationList = isProd ? { ...prodOptimizations } : { ...devOptimizations };
 
   console.log('Build Mode:');
   console.log(isProd);
-
   console.log('Modules:');
   console.log(module.exports);
-
   console.log('Optimization List:');
-
   console.log(optimizationList);
-
   console.log(module.exports.optimization);
 
   return {
@@ -184,7 +189,7 @@ module.exports = (env, argv) => {
             {
               loader: 'lit-scss-loader',
               options: {
-                minify: true, // defaults to false
+                minify: true,
               },
             },
             'extract-loader',
