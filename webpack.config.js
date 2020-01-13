@@ -7,6 +7,29 @@ const path = require('path'),
 
 const CompressionPlugin = require('compression-webpack-plugin');
 
+const htmlTemplate = environmentProduction => `
+      <!DOCTYPE html>
+          <html>
+            <head>
+              <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed|KoHo|Kodchasan:400,500,600|Nova+Slim|Rationale|Satisfy&display=swap" rel="stylesheet">
+              <style>
+                body{
+                  margin: 0;
+                }
+              </style>
+            </head>
+            <body>
+                <poster-form-element></poster-form-element>
+               ${
+                 environmentProduction
+                   ? '<script defer src="vendors~index.js?inProd"></script>'
+                   : '<script defer src="vendors~index.js?inDev"></script>'
+               }
+
+            </body>
+          </html>
+      `;
+
 module.exports = (env, argv) => {
   let isProd;
 
@@ -47,28 +70,7 @@ module.exports = (env, argv) => {
         removeStyleLinkTypeAttributese: true,
         useShortDoctype: true,
       },
-      template: () => `
-      <!DOCTYPE html>
-          <html>
-            <head>
-              <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed|KoHo|Kodchasan:400,500,600|Nova+Slim|Rationale|Satisfy&display=swap" rel="stylesheet">
-              <style>
-                body{
-                  margin: 0;
-                }
-              </style>
-            </head>
-            <body>
-                <poster-form-element></poster-form-element>
-               ${
-                 isProd
-                   ? '<script defer src="vendors~index.js?inProd"></script>'
-                   : '<script defer src="vendors~index.js?inDev"></script>'
-               }
-
-            </body>
-          </html>
-      `,
+      template: () => htmlTemplate(isProd),
     }),
   ];
   /**
