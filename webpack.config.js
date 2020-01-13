@@ -62,7 +62,7 @@ module.exports = (env, argv) => {
                 <poster-form-element></poster-form-element>
                ${
                  isProd
-                   ? '<script defer src="vendors~index.js.br?inProd"></script>'
+                   ? '<script defer src="vendors~index.js?inProd"></script>'
                    : '<script defer src="vendors~index.js?inDev"></script>'
                }
 
@@ -85,7 +85,7 @@ module.exports = (env, argv) => {
       },
       threshold: 10240,
       minRatio: 0.8,
-      deleteOriginalAssets: true ? isProd : !isProd,
+      deleteOriginalAssets: false ? isProd : !isProd,
     }),
   ];
 
