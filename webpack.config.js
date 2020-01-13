@@ -3,9 +3,9 @@ const path = require('path'),
   webpack = require('webpack'),
   WebpackIndexHTMLPlugin = require('@open-wc/webpack-index-html-plugin'),
   { CleanWebpackPlugin } = require('clean-webpack-plugin'),
-  TerserPlugin = require('terser-webpack-plugin');
-
-const CompressionPlugin = require('compression-webpack-plugin');
+  TerserPlugin = require('terser-webpack-plugin'),
+  CompressionPlugin = require('compression-webpack-plugin'),
+  UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const htmlTemplate = environmentProduction => `
       <!DOCTYPE html>
@@ -123,6 +123,7 @@ module.exports = (env, argv) => {
   const prodOptimizations = {
     ...commonOptimizations,
     minimizer: [
+      new UglifyJsPlugin(),
       new TerserPlugin({
         extractComments: 'all',
         cache: !isProd,
