@@ -59,7 +59,7 @@ module.exports = (env, argv) => {
       },
       threshold: 10240,
       minRatio: 0.8,
-      deleteOriginalAssets: false ? isProd : !isProd,
+      deleteOriginalAssets: false,
     }),
   ];
 

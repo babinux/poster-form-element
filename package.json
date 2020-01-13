@@ -44,7 +44,7 @@
     "poster-design-element": "git+https://github.com/babinux/poster-design-element.git",
     "sass-loader": "^8.0.0",
     "scss-loader": "0.0.1",
-    "terser-webpack-plugin": "^2.3.1"
+    "terser-webpack-plugin": "^2.3.2"
   },
   "babel": {
     "plugins": [
