@@ -1,4 +1,4 @@
 [build]
   # command = "node build" # the command you run to build this file
-  functions = "dist/functions-lambda" # netlify-lambda builds to this folder AND Netlify reads functions from here
+  functions = "dist/functions-lambda/" # netlify-lambda builds to this folder AND Netlify reads functions from here
   publish = "dist" # create-react-app builds to this folder, Netlify should serve all these files statically

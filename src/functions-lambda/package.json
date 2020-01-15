@@ -10,6 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "capture-website": "^0.8.1",
-    "netlify-lambda": "^1.6.0"
+    "chrome-aws-lambda": "^2.0.0",
+    "puppeteer-core": "^2.0.0"
+  },
+  "devDependencies": {
+    "puppeteer": "^2.0.0"
   }
 }
