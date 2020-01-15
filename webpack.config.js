@@ -34,17 +34,17 @@ const htmlTemplate = isProduction => `
 module.exports = (env, argv) => {
   let isProd;
 
-  console.log(argv.mode);
+  // console.log(argv.mode);
   process.env.NODE_ENV = argv.mode;
 
-  console.log(argv.local);
+  // console.log(argv.local);
   const localProd = argv.local;
 
   if (process.env.NODE_ENV === 'production') {
-    console.log('Looks like we are in Production mode!');
+    // console.log('Looks like we are in Production mode!');
     isProd = true;
   } else {
-    console.log('Looks like we are in development mode!');
+    // console.log('Looks like we are in development mode!');
     process.env.NODE_ENV = 'development';
     isProd = false;
   }

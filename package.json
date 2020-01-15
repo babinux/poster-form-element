@@ -7,7 +7,11 @@
   "main": "index.js",
   "module": "index.js",
   "scripts": {
-    "start": "webpack-dev-server  --mode=development  --node-resolve  --progress --info-verbosity verbose --open --watch",
+    "start:dev": "webpack-dev-server  --mode=development  --node-resolve  --progress --info-verbosity verbose --open --watch",
+    "build": "webpack --mode=production --local --progress --info-verbosity && netlify-lambda build src/functions-lambda",
+    "start:build": "webpack --mode=production --local --progress --info-verbosity && cd dist && es-dev-server --open",
+    "build:lambda": "netlify-lambda build --config ./webpack.functions.js ./src/functions-lambda",
+    "start:lambda": "netlify-lambda serve --timeout=60 --config ./webpack.functions.js ./src/functions-lambda",
     "lint:eslint": "eslint --ext .js,.html . --ignore-path .gitignore",
     "format:eslint": "eslint --ext .js,.html . --fix --ignore-path .gitignore",
     "lint:prettier": "prettier \"**/*.js\" --check --ignore-path .gitignore",
@@ -20,12 +24,7 @@
     "test:prune-snapshots": "karma start --prune-snapshots",
     "test:bs": "karma start karma.bs.config.js --coverage",
     "storybook": "start-storybook --node-resolve --watch --open",
-    "storybook:build": "build-storybook",
-    "start:prod": "webpack --mode=production --local --progress --info-verbosity && cd dist && es-dev-server --open",
-    "build": "webpack --mode=production --local --progress --info-verbosity && netlify-lambda build src/functions-lambda",
-    "install:lambda": "netlify-lambda install src/functions-lambda",
-    "start:lambda": "netlify-lambda serve --timeout=60 --config ./webpack.functions.js src/functions-lambda",
-    "build:lambda": "netlify-lambda build --config ./webpack.functions.js src/functions-lambda"
+    "storybook:build": "build-storybook"
   },
   "dependencies": {
     "@em-polymer/google-map": "^3.0.0-pre.5",
