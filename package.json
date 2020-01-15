@@ -8,11 +8,10 @@
   "module": "index.js",
   "scripts": {
     "start:dev": "webpack-dev-server  --mode=development  --node-resolve  --progress --info-verbosity verbose --open --watch",
-    "build": "webpack --mode=production --local --progress --info-verbosity && netlify-lambda build src/functions-lambda",
+    "build": "webpack --mode=production --local --progress --info-verbosity && netlify-lambda build --timeout=60 --config  ./webpack.functions.js ./src/functions-lambda/",
     "start:build": "webpack --mode=production --local --progress --info-verbosity && cd dist && es-dev-server --open",
-    "build:lambda": "netlify-lambda build --config  ./webpack.functions.js ./src/functions-lambda/",
+    "build:lambda": "netlify-lambda build --timeout=60 --config  ./webpack.functions.js ./src/functions-lambda/",
     "start:lambda": "netlify-lambda serve --timeout=60 --config ./webpack.functions.js  ./src/functions-lambda/",
-    "start:lambdaTOTRASH": "netlify-lambda serve ./dist/functions-lambda/",
     "lint:eslint": "eslint --ext .js,.html . --ignore-path .gitignore",
     "format:eslint": "eslint --ext .js,.html . --fix --ignore-path .gitignore",
     "lint:prettier": "prettier \"**/*.js\" --check --ignore-path .gitignore",
