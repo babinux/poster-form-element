@@ -264,6 +264,7 @@ export class PosterFormElement extends LitElement {
       <div id="mygrid">
         <div class="admin-poster-layout--block--center">
           <poster-design-element
+            id="poster-design-element"
             postertitle="${this.posterTitle}"
             postersubtitle="${this.posterSubtitle}"
             posterlocation="${this.posterLocation}"

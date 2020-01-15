@@ -23,8 +23,9 @@
     "storybook:build": "build-storybook",
     "start:prod": "webpack --mode=production --local --progress --info-verbosity && cd dist && es-dev-server --open",
     "build": "webpack --mode=production --local --progress --info-verbosity && netlify-lambda build src/functions-lambda",
-    "start:lambda": "netlify-lambda serve src/functions-lambda",
-    "build:lambda": "netlify-lambda build src/functions-lambda"
+    "install:lambda": "netlify-lambda install src/functions-lambda",
+    "start:lambda": "netlify-lambda serve --timeout=60 --config ./webpack.functions.js src/functions-lambda",
+    "build:lambda": "netlify-lambda build --config ./webpack.functions.js src/functions-lambda"
   },
   "dependencies": {
     "@em-polymer/google-map": "^3.0.0-pre.5",
@@ -48,7 +49,8 @@
     "poster-design-element": "git+https://github.com/babinux/poster-design-element.git",
     "sass-loader": "^8.0.1",
     "scss-loader": "0.0.1",
-    "terser-webpack-plugin": "^2.3.2"
+    "terser-webpack-plugin": "^2.3.2",
+    "webpack-node-externals": "^1.7.2"
   },
   "babel": {
     "plugins": [
