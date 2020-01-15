@@ -171,7 +171,7 @@ module.exports = (env, argv) => {
   console.log(module.exports.optimization);
 
   return {
-    // externals: [nodeExternals()],
+    externals: [nodeExternals()],
 
     devtool: isProd ? '' : 'inline-source-map',
     entry: {
