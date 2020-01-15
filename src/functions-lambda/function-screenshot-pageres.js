@@ -15,6 +15,7 @@ exports.handler = async event => {
     // scaleFactor: 0.1,
     // waitForElement: 'poster-design-element',
     // element: '#poster-design-element',
+    //
   });
 
   return {
