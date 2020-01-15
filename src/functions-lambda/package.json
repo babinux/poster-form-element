@@ -2,9 +2,8 @@
   "name": "lambda-functions",
   "version": "1.0.0",
   "description": "",
-  "main": "screenshot-pageres.js",
   "scripts": {
-    "postinstall": "netlify-lambda install",
+    "postinstall": "npm install && netlify-lambda install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
