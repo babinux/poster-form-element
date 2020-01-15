@@ -8,8 +8,6 @@ const path = require('path'),
   // eslint-disable-next-line no-unused-vars
   UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-const nodeExternals = require('webpack-node-externals');
-
 const htmlTemplate = isProduction => `
       <!DOCTYPE html>
           <html>
@@ -170,7 +168,6 @@ module.exports = (env, argv) => {
   console.log(module.exports.optimization);
 
   return {
-    externals: [nodeExternals()],
     devtool: isProd ? '' : 'inline-source-map',
     entry: {
       index: path.resolve(__dirname, './index.js'),
