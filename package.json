@@ -22,7 +22,9 @@
     "storybook": "start-storybook --node-resolve --watch --open",
     "storybook:build": "build-storybook",
     "start:prod": "webpack --mode=production --local --progress --info-verbosity && cd dist && es-dev-server --open",
-    "build": "webpack --mode=production --local --progress --info-verbosity"
+    "build": "webpack --mode=production --local --progress --info-verbosity && netlify-lambda build src/functions-lambda",
+    "start:lambda": "netlify-lambda serve src/functions-lambda",
+    "build:lambda": "netlify-lambda build src/functions-lambda"
   },
   "dependencies": {
     "@em-polymer/google-map": "^3.0.0-pre.5",
