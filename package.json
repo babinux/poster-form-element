@@ -8,8 +8,9 @@
   "module": "index.js",
   "scripts": {
     "start:dev": "webpack-dev-server  --mode=development  --node-resolve  --progress --info-verbosity verbose --open --watch",
-    "build": "webpack --mode=production --local --progress --info-verbosity && netlify-lambda build --timeout=60 --config  ./webpack.functions.js ./src/functions-lambda/",
+    "build": "webpack --mode=production --local --progress --info-verbosity && netlify-lambda install ./src/functions-lambda/ && netlify-lambda build --timeout=60 --config ./webpack.functions.js ./src/functions-lambda/",
     "start:build": "webpack --mode=production --local --progress --info-verbosity && cd dist && es-dev-server --open",
+    "install:lambda": "netlify-lambda install ./src/functions-lambda/",
     "build:lambda": "netlify-lambda build --timeout=60 --config  ./webpack.functions.js ./src/functions-lambda/",
     "start:lambda": "netlify-lambda serve --timeout=60 --config ./webpack.functions.js  ./src/functions-lambda/",
     "lint:eslint": "eslint --ext .js,.html . --ignore-path .gitignore",
