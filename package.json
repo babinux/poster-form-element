@@ -9,7 +9,7 @@
   "scripts": {
     "serve:dev": "webpack-dev-server  --mode=development  --node-resolve  --progress --info-verbosity verbose --open --watch",
     "build": "webpack --mode=production --local --progress --info-verbosity && netlify-lambda install ./src/functions-lambda/ && netlify-lambda build --timeout=60 --config ./webpack.functions.js ./src/functions-lambda/",
-    "serve:build": "webpack --mode=production --local --progress --info-verbosity && cd dist && es-dev-server --open",
+    "serve:build": "cd dist && es-dev-server --open",
     "install:lambda": "netlify-lambda install ./src/functions-lambda/",
     "build:lambda": "netlify-lambda build --timeout=60 --config  ./webpack.functions.js ./src/functions-lambda/",
     "serve:lambda": "netlify-lambda serve --timeout=60 --config ./webpack.functions.js  ./src/functions-lambda/",
@@ -43,7 +43,9 @@
     "netlify-lambda": "^1.6.3",
     "webpack-node-externals": "^1.7.2",
     "planet-clock-element": "git+https://github.com/babinux/planet-clock-element.git",
-    "poster-design-element": "git+https://github.com/babinux/poster-design-element.git"
+    "poster-design-element": "git+https://github.com/babinux/poster-design-element.git",
+    "chrome-aws-lambda": "^2.0.0",
+    "puppeteer-core": "^2.0.0"
   },
   "babel": {
     "plugins": [
@@ -80,7 +82,8 @@
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.28.0",
     "webpack-cli": "^3.3.4",
-    "webpack-dev-server": "^3.10.1"
+    "webpack-dev-server": "^3.10.1",
+    "puppeteer": "^2.0.0"
   },
   "eslintConfig": {
     "extends": [
