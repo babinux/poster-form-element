@@ -46,6 +46,10 @@ exports.handler = async () => {
     if (!rect) throw Error(`Could not find element that matches selector: ${selector}.`);
 
     return page.screenshot({
+      fullPage: false,
+      encoding: 'base64',
+      quality: 100,
+      type: 'jpeg',
       clip: {
         x: rect.left,
         y: rect.top,

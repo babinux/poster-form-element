@@ -40,6 +40,10 @@ exports.handler = async () => {
     });
 
     return page.screenshot({
+      fullPage: false,
+      encoding: 'base64',
+      quality: 100,
+      type: 'jpeg',
       clip: {
         x: rect.left,
         y: rect.top,
