@@ -1,8 +1,8 @@
 // import chromium from 'chrome-aws-lambda';
 // import puppeteer from 'puppeteer-core';
 
-const chromium = require('chrome-aws-lambda');
 const puppeteer = require('puppeteer-core');
+const chromium = require('chrome-aws-lambda');
 
 exports.handler = async () => {
   // console.log(`event.body`);
