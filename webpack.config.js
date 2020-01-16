@@ -9,7 +9,7 @@ const path = require('path'),
   UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 // eslint-disable-next-line no-unused-vars
-const nodeExternals = require('webpack-node-externals');
+// const nodeExternals = require('webpack-node-externals');
 
 const htmlTemplate = isProduction => `
       <!DOCTYPE html>
