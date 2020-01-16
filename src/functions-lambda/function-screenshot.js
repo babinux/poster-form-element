@@ -1,7 +1,6 @@
 // import chromium from 'chrome-aws-lambda';
 // import puppeteer from 'puppeteer-core';
 
-const puppeteer = require('puppeteer-core');
 const chromium = require('chrome-aws-lambda');
 
 exports.handler = async () => {
@@ -17,19 +16,19 @@ exports.handler = async () => {
       body: JSON.stringify({ message: 'Page URL not defined' }),
     };
 
-  // const browser = await chromium.puppeteer.launch({
-  //   args: chromium.args,
-  //   defaultViewport: chromium.defaultViewport,
-  //   executablePath: await chromium.executablePath,
-  //   headless: chromium.headless,
-  // });
-
-  const browser = await puppeteer.launch({
+  const browser = await chromium.puppeteer.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
     executablePath: await chromium.executablePath,
     headless: chromium.headless,
   });
+
+  // const browser = await puppeteer.launch({
+  //   args: chromium.args,
+  //   defaultViewport: chromium.defaultViewport,
+  //   executablePath: await chromium.executablePath,
+  //   headless: chromium.headless,
+  // });
 
   const page = await browser.newPage();
 
