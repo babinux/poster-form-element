@@ -4,10 +4,6 @@
 const chromium = require('chrome-aws-lambda');
 
 exports.handler = async () => {
-  // console.log(`event.body`);
-  // console.log(event.body);
-
-  // const eventPageToScreenshot = JSON.parse(event.body).pageToScreenshot;
   const pageToScreenshot = 'https://starry-poster.netlify.com/?posterPrint=0';
 
   if (!pageToScreenshot)
@@ -22,13 +18,6 @@ exports.handler = async () => {
     executablePath: await chromium.executablePath,
     headless: chromium.headless,
   });
-
-  // const browser = await puppeteer.launch({
-  //   args: chromium.args,
-  //   defaultViewport: chromium.defaultViewport,
-  //   executablePath: await chromium.executablePath,
-  //   headless: chromium.headless,
-  // });
 
   const page = await browser.newPage();
 
