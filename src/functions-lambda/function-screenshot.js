@@ -4,7 +4,7 @@
 const chromium = require('chrome-aws-lambda');
 
 exports.handler = async () => {
-  const pageToScreenshot = 'https://starry-poster.netlify.com/?posterPrint=1';
+  const pageToScreenshot = 'https://starry-poster.netlify.com/?posterPrint=0';
 
   if (!pageToScreenshot)
     return {
