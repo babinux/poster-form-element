@@ -47,13 +47,6 @@
     "chrome-aws-lambda": "^2.0.0",
     "puppeteer-core": "^2.0.0"
   },
-  "babel": {
-    "plugins": [
-      [
-        "@babel/plugin-proposal-class-properties"
-      ]
-    ]
-  },
   "devDependencies": {
     "@open-wc/building-webpack": "^2.10.8",
     "@open-wc/demoing-storybook": "^1.6.1",
@@ -84,6 +77,13 @@
     "webpack-cli": "^3.3.4",
     "webpack-dev-server": "^3.10.1",
     "puppeteer": "^2.0.0"
+  },
+  "babel": {
+    "plugins": [
+      [
+        "@babel/plugin-proposal-class-properties"
+      ]
+    ]
   },
   "eslintConfig": {
     "extends": [

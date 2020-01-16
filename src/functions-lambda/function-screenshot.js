@@ -8,7 +8,7 @@ exports.handler = async () => {
   // console.log(event.body);
 
   // const eventPageToScreenshot = JSON.parse(event.body).pageToScreenshot;
-  const pageToScreenshot = 'https://starry-poster.netlify.com/?posterPrint=1';
+  const pageToScreenshot = 'https://davidwells.io';
 
   if (!pageToScreenshot)
     return {
