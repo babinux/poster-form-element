@@ -1,4 +1,9 @@
 /* eslint-disable no-unused-vars */
+
+//* ************************************ */
+//           Deprecated
+//* ************************************ */
+
 // import chromium from 'chrome-aws-lambda';
 // import puppeteer from 'puppeteer-core';
 
