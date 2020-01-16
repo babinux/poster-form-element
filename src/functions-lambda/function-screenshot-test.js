@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 // import chromium from 'chrome-aws-lambda';
 // import puppeteer from 'puppeteer-core';
 
@@ -24,15 +23,12 @@ exports.handler = async () => {
 
   await page.goto(pageToScreenshot, { waitUntil: 'networkidle2' });
 
-  async function screenshotDOMElement(opts = {}) {
+  async function screenshotDOMElement() {
     // eslint-disable-next-line prefer-destructuring
-    const selector = opts.selector;
 
-    if (!selector) throw Error('Please provide a selector.');
-
-    // eslint-disable-next-line no-shadow
-    const rect = await page.evaluate(selector => {
-      // console.log(selector);
+    // eslint-disable-next-line no-unused-vars
+    const rect = await page.evaluate(() => {
+      // console.log(theSelector);
 
       const element = document
         .querySelector('#poster-design-element')
@@ -41,9 +37,7 @@ exports.handler = async () => {
       if (!element) return null;
       const { x, y, width, height } = element.getBoundingClientRect();
       return { left: x, top: y, width, height, id: element.id };
-    }, selector);
-
-    if (!rect) throw Error(`Could not find element that matches selector: ${selector}.`);
+    });
 
     return page.screenshot({
       clip: {
