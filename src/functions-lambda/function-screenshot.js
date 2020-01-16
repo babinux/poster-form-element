@@ -4,7 +4,7 @@
 const chromium = require('chrome-aws-lambda');
 
 exports.handler = async () => {
-  const pageToScreenshot = 'https://starry-poster.netlify.com/?posterPrint=0&posterDesign=4';
+  const pageToScreenshot = 'https://starry-poster.netlify.com/?posterPrint=0&posterDesign=3';
 
   if (!pageToScreenshot)
     return {
@@ -23,39 +23,11 @@ exports.handler = async () => {
 
   await page.goto(pageToScreenshot, { waitUntil: 'networkidle2' });
 
-  async function screenshotDOMElement(opts = {}) {
-    // eslint-disable-next-line prefer-destructuring
-    const selector = opts.selector;
-
-    if (!selector) throw Error('Please provide a selector.');
-
-    // eslint-disable-next-line no-unused-vars
-    const rect = await page.evaluate(theSelector => {
-      // console.log(theSelector);
-
-      const element = document
-        .querySelector('#poster-design-element')
-        .shadowRoot.querySelector('#poster');
-
-      if (!element) return null;
-      const { x, y, width, height } = element.getBoundingClientRect();
-      return { left: x, top: y, width, height, id: element.id };
-    }, selector);
-
-    if (!rect) throw Error(`Could not find element that matches selector: ${selector}.`);
-
-    return page.screenshot({
-      clip: {
-        x: rect.left,
-        y: rect.top,
-        width: rect.width,
-        height: rect.height,
-      },
-    });
-  }
-
-  const screenshot = await screenshotDOMElement({
-    selector: 'header aside',
+  const screenshot = await page.screenshot({
+    fullPage: true,
+    quality: 100,
+    type: 'jpeg',
+    encoding: 'base64',
   });
 
   await browser.close();
