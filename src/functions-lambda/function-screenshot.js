@@ -55,10 +55,12 @@ async function screenshotDOMElement(page, opts = {}) {
 }
 
 exports.handler = async event => {
-  // console.log('event');
-  // console.log(event);
-
-  const baseUrl = 'https://starry-poster.netlify.com';
+  const baseUrl =
+    event.queryStringParameters.posterPrint === '1' ||
+    event.queryStringParameters.fullPage ||
+    event.queryStringParameters.fullScreen
+      ? 'http://localhost:8080/'
+      : 'https://starry-poster.netlify.com';
   const pageToScreenshot = new URL('/', baseUrl);
 
   pageToScreenshot.searchParams.set(
@@ -114,6 +116,14 @@ exports.handler = async event => {
   });
 
   const page = await browser.newPage();
+
+  // await page.setViewport({
+  //   // width: 200,
+  //   // height: 300,
+  //   width: 800,
+  //   height: 800,
+  //   deviceScaleFactor: 1.8,
+  // });
 
   await page.goto(pageToScreenshot.href, { waitUntil: 'networkidle2' });
 
