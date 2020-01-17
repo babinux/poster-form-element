@@ -119,7 +119,7 @@ exports.handler = async event => {
 
   let screenshot;
 
-  if (pageToScreenshot.searchParams.posterPrint === '0') {
+  if (pageToScreenshot.searchParams.get('posterPrint') === '0') {
     screenshot = await screenshotDOMElement(page, {
       selector: `document
         .querySelector('#poster-design-element')
