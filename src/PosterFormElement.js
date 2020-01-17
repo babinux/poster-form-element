@@ -425,10 +425,21 @@ export class PosterFormElement extends LitElement {
         return;
       }
       this.posterLocation = this.places[0].formatted_address;
-      const superman = `${this.places[0].geometry.location
-        .lat()
-        .toFixed(5)}°N, ${this.places[0].geometry.location.lng().toFixed(5)}°W`;
-      this.setAttribute('posterCoordinates', superman);
+
+      const latitudeNorthSouthSign = this.places[0].geometry.location.lat() > 0 ? 'N' : 'S';
+      const longitudeEastWestSign = this.places[0].geometry.location.lng() > 0 ? 'E' : 'W';
+
+      const latitude =
+        this.places[0].geometry.location.lat() > 0
+          ? this.places[0].geometry.location.lat().toFixed(5)
+          : this.places[0].geometry.location.lat().toFixed(5) * -1;
+      const longitude =
+        this.places[0].geometry.location.lng() > 0
+          ? this.places[0].geometry.location.lng().toFixed(5)
+          : this.places[0].geometry.location.lng().toFixed(5) * -1;
+
+      const coordinates = `${latitude}°${latitudeNorthSouthSign}, ${longitude}°${longitudeEastWestSign}`;
+      this.setAttribute('posterCoordinates', coordinates);
     });
   }
 }
