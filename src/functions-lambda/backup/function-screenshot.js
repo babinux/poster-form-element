@@ -14,8 +14,8 @@
 //* ************************************ */
 //* ************************************ */
 
-// const chromium = require('chrome-aws-lambda');
-import chromium from 'chrome-aws-lambda';
+const chromium = require('chrome-aws-lambda');
+// import chromium from 'chrome-aws-lambda';
 
 async function screenshotDOMElement(page, opts = {}) {
   // eslint-disable-next-line prefer-destructuring
@@ -55,9 +55,8 @@ async function screenshotDOMElement(page, opts = {}) {
 }
 
 exports.handler = async event => {
-  console.log('event');
-
-  console.log(event);
+  // console.log('event');
+  // console.log(event);
 
   const baseUrl = 'https://starry-poster.netlify.com';
   const pageToScreenshot = new URL('/', baseUrl);
