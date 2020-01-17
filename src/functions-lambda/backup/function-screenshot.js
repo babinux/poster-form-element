@@ -61,7 +61,14 @@ exports.handler = async event => {
   const baseUrl = 'https://starry-poster.netlify.com';
   const pageToScreenshot = new URL('/', baseUrl);
 
-  pageToScreenshot.searchParams.set('posterPrint', event.queryStringParameters.posterPrint || '0');
+  pageToScreenshot.searchParams.set(
+    'posterPrint',
+    event.queryStringParameters.posterPrint === '1' ||
+      event.queryStringParameters.fullPage ||
+      event.queryStringParameters.fullScreen
+      ? '1'
+      : '0',
+  );
   pageToScreenshot.searchParams.set(
     'posterDesign',
     event.queryStringParameters.posterDesign || '3',
@@ -112,7 +119,7 @@ exports.handler = async event => {
 
   let screenshot;
 
-  if (!event.queryStringParameters.fullPage) {
+  if (pageToScreenshot.searchParams.posterPrint === '0') {
     screenshot = await screenshotDOMElement(page, {
       selector: `document
         .querySelector('#poster-design-element')
