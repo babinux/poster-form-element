@@ -14,10 +14,8 @@
 //* ************************************ */
 //* ************************************ */
 
-// import chromium from 'chrome-aws-lambda';
-// import puppeteer from 'puppeteer-core';
-
-const chromium = require('chrome-aws-lambda');
+// const chromium = require('chrome-aws-lambda');
+import chromium from 'chrome-aws-lambda';
 
 async function screenshotDOMElement(page, opts = {}) {
   // eslint-disable-next-line prefer-destructuring
