@@ -59,11 +59,7 @@ const htmlTemplate = isProduction => `
               <meta name="author" content="${appAuthor}">
               <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
-
               <link rel="manifest" href="/manifest.json">
-
-
-
 
               <meta name="theme-color" content="${themeColor}"/>
               <link rel="canonical" href="${canonical}"/>
@@ -103,9 +99,6 @@ const htmlTemplate = isProduction => `
               <meta property='og:url' content='${domain}' />
               <meta property='og:image' content='${domain}${iconsLocation}/apple-touch-icon.png' />
 
-
-
-
           <!--
                 <link rel="preload" href=npm.webcomponents.js as="script">
                 <link rel="preload" href=npm.lit-element.js as="script">
@@ -141,7 +134,7 @@ const htmlTemplate = isProduction => `
             -->
 
 
-                <script src=vendors~index.js></script>
+
 
 
             <!--
@@ -167,7 +160,7 @@ const htmlTemplate = isProduction => `
               }</script>
 
 
-
+              <script src=vendors~index.js></script>
 
             </body>
           </html>
@@ -411,7 +404,7 @@ module.exports = (env, argv) => {
   console.log(optimizationList);
   console.log(module.exports.optimization);
 
-  new PngToIco(path.resolve(__dirname, './app/assets/icons/Logo Black Small.png'))
+  new PngToIco(path.resolve(__dirname, './app/assets/icons/favicon.png'))
     .then(buf => {
       fs.writeFileSync(path.resolve(__dirname, './dist/favicon.ico'), buf);
     })
