@@ -59,9 +59,9 @@ const htmlTemplate = isProduction => `
               <meta name="author" content="${appAuthor}">
               <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
-            <!--
+
               <link rel="manifest" href="/manifest.json">
-            <--
+
 
 
 
@@ -152,31 +152,27 @@ const htmlTemplate = isProduction => `
           -->
 
 
-<!--
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-      // Registration was successful
-      console.log('ServiceWorker registration successful with scope: ', registration.scope);
-    }, function(err) {
-      // registration failed :(
-      console.log('ServiceWorker registration failed: ', err);
-    });
-  });
-}</script>
 
--->
+              <script>
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                    // Registration was successful
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                  }, function(err) {
+                    // registration failed :(
+                    console.log('ServiceWorker registration failed: ', err);
+                  });
+                });
+              }</script>
+
+
 
 
             </body>
           </html>
       `;
-//  ${
-//                  isProduction
-//                    ? '<script defer src="vendors.js?inProd"></script>'
-//                    : '<script defer src="vendors.js?inDev"></script>'
-//                }
+
 module.exports = (env, argv) => {
   let isProd;
 
@@ -199,13 +195,8 @@ module.exports = (env, argv) => {
    * Plugins for production environment
    */
   let prodPlugins = [];
+  // eslint-disable-next-line no-unused-vars
   const cleanPlugin = [new CleanWebpackPlugin()];
-
-  new PngToIco(path.resolve(__dirname, './app/assets/icons/Logo Black Small.png'))
-    .then(buf => {
-      fs.writeFileSync(path.resolve(__dirname, './dist/favicon.ico'), buf);
-    })
-    .catch(console.error);
 
   if (!localProd) {
     prodPlugins = [
@@ -228,7 +219,7 @@ module.exports = (env, argv) => {
    * Plugins for dev environment
    */
   const devPlugins = [
-    ...cleanPlugin,
+    // ...cleanPlugin,
     new WorkboxPlugin.GenerateSW({
       // Do not precache images
       exclude: [/\.(?:png|jpg|jpeg|svg)$/],
@@ -382,10 +373,10 @@ module.exports = (env, argv) => {
           // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
         },
       }),
-      // new TerserPlugin({
-      //   // Ensure .mjs files get included.
-      //   test: /\.m?js$/,
-      // }),
+      new TerserPlugin({
+        // Ensure .mjs files get included.
+        test: /\.m?js$/,
+      }),
     ],
   };
 
@@ -419,6 +410,12 @@ module.exports = (env, argv) => {
   console.log('Optimization List:');
   console.log(optimizationList);
   console.log(module.exports.optimization);
+
+  new PngToIco(path.resolve(__dirname, './app/assets/icons/Logo Black Small.png'))
+    .then(buf => {
+      fs.writeFileSync(path.resolve(__dirname, './dist/favicon.ico'), buf);
+    })
+    .catch(console.error);
 
   return {
     // externals: [nodeExternals()],
