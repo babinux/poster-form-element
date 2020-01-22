@@ -1,1 +1,1 @@
-export { PosterFormElement } from './src/PosterFormElement.js';
+export { PosterFormElement } from './app/src/PosterFormElement.js';
