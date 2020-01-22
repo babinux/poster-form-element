@@ -133,19 +133,15 @@ const htmlTemplate = isProduction => `
                 <script src=npm.poster-design-element.js></script>
             -->
 
-
-
-
-
             <!--
                 <script src=npm.process.js></script>
                 <script src=npm.setimmediate.js></script>
                 <script src=npm.timers-browserify.js></script>
                 <script src=npm.webpack.js></script>
-          -->
+            -->
 
 
-
+<!--
               <script>
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
@@ -158,7 +154,7 @@ const htmlTemplate = isProduction => `
                   });
                 });
               }</script>
-
+-->
 
               <script src=vendors~index.js></script>
 
@@ -365,10 +361,6 @@ module.exports = (env, argv) => {
         terserOptions: {
           // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
         },
-      }),
-      new TerserPlugin({
-        // Ensure .mjs files get included.
-        test: /\.m?js$/,
       }),
     ],
   };
