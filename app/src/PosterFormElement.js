@@ -11,7 +11,7 @@ import '@vaadin/vaadin-combo-box';
 import '@vaadin/vaadin-context-menu';
 
 // Style Import : Main/Current Component Style
-import componentStyle from './style.scss';
+import componentStyle from '../style/style.scss';
 
 const GoogleMapsLoader = require('google-maps'); // only for common js environments
 
