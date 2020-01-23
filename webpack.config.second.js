@@ -15,6 +15,8 @@ const GoogleFontsPlugin = require('@beyonk/google-fonts-webpack-plugin');
 const PostCompile = require('post-compile-webpack-plugin');
 const PngToIco = require('png-to-ico');
 const fs = require('fs-extra');
+// eslint-disable-next-line no-unused-vars
+const BrotliPlugin = require('brotli-webpack-plugin');
 
 // eslint-disable-next-line no-unused-vars
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -29,9 +31,6 @@ const appName = 'Starry App';
 const appDescription = `Create, design personalized map of the solar system for a special occasion.`;
 const appKeywords = `${appName} solar system, planets, poster, birthday, anniversary, earth`;
 const appAuthor = `Jerome Botcho`;
-
-// const fontsCustom =
-//   'https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed|KoHo|Kodchasan:400,500,600|Nova+Slim|Rationale|Satisfy&display=swap';
 
 const themeColor = '#317EFB';
 const tileColor = '#317EFB';
@@ -65,46 +64,30 @@ module.exports = (env, argv) => {
     isProd = false;
   }
 
-  // let prodPlugins = [];
+  let prodPlugins = [];
 
-  // if (!localProd) {
-  const prodPlugins = [
-    new CleanWebpackPlugin(),
-    new CompressionPlugin({
-      filename: '[path].br[query]',
-      algorithm: 'gzip',
-      test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.png?.+$|\.jpg?.+$|\.ico?.+$|\.svg?.+$/,
-      threshold: 10240,
-      minRatio: 0.7,
-    }),
-    new CompressionPlugin({
-      filename: '[path].br[query]',
-      algorithm: 'brotliCompress',
-      test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.png?.+$|\.jpg?.+$|\.ico?.+$|\.svg?.+$/,
-      compressionOptions: {
-        level: 11,
-      },
-      threshold: 10240,
-      minRatio: 0.8,
-      // deleteOriginalAssets: false ? isProd : !isProd,
-    }),
-    new PostCompile(() => {
-      console.log('Adding Fav Icon');
-
-      const dir = './dist';
-
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-      }
-
-      new PngToIco(path.resolve(__dirname, './app/assets/icons/favicon.png'))
-        .then(buf => {
-          fs.writeFileSync(path.resolve(__dirname, './dist/favicon.ico'), buf);
-        })
-        .catch(console.error);
-    }),
-  ];
-  // }
+  if (!localProd) {
+    prodPlugins = [
+      new CompressionPlugin({
+        filename: '[path].br[query]',
+        algorithm: 'gzip',
+        test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.png?.+$|\.jpg?.+$|\.ico?.+$|\.svg?.+$/,
+        threshold: 10240,
+        minRatio: 0.7,
+      }),
+      new CompressionPlugin({
+        filename: '[path].br[query]',
+        algorithm: 'brotliCompress',
+        test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.png?.+$|\.jpg?.+$|\.ico?.+$|\.svg?.+$/,
+        compressionOptions: {
+          level: 11,
+        },
+        threshold: 10240,
+        minRatio: 0.8,
+        // deleteOriginalAssets: false ? isProd : !isProd,
+      }),
+    ];
+  }
 
   /**
    * Plugins for dev environment
@@ -115,19 +98,17 @@ module.exports = (env, argv) => {
       'process.env.DEBUG': JSON.stringify(process.env.DEBUG),
       __ENV__: JSON.stringify(process.env.NODE_ENV || 'development'),
     }),
-    new CopyPlugin([{ from: 'app/assets/icons/icon_192x192.png', to: './' }]),
+    new CleanWebpackPlugin(),
     new GoogleFontsPlugin({
-      fonts: [
-        { family: 'Barlow Semi Condensed' },
-        // { family: 'Nova Slim' },
-        // { family: 'Rationale' },
-        { family: 'Satisfy' },
-        // { family: 'KoHo', variants: ['400', '700italic'] },
-        // { family: 'Kodchasan', variants: ['400', '500', '600'] },
-      ],
-      apiUrl: 'https://google-webfonts-helper.herokuapp.com/api/fonts',
-      // https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed|KoHo|Kodchasan:400,500,600|Nova+Slim|Rationale|Satisfy&display=swap
-      /* ...options */
+      fonts: [{ family: 'Barlow Semi Condensed' }, { family: 'Satisfy' }],
+    }),
+    new CopyPlugin([{ from: 'app/assets/icons/icon_192x192.png', to: './' }]),
+    new PostCompile(() => {
+      new PngToIco(path.resolve(__dirname, './app/assets/icons/favicon.png'))
+        .then(buf => {
+          fs.writeFileSync(path.resolve(__dirname, './dist/favicon.ico'), buf);
+        })
+        .catch(console.error);
     }),
     new WebpackPwaManifest({
       name: `${appName}`,
@@ -182,7 +163,7 @@ module.exports = (env, argv) => {
         html5: true,
         minifyCSS: isProd,
         minifyJS: isProd,
-        minifyURLs: true,
+        minifyURLs: isProd,
         removeAttributeQuotes: true,
         removeEmptyAttributes: true,
         removeOptionalTags: false,
@@ -234,7 +215,6 @@ module.exports = (env, argv) => {
   ];
 
   const commonOptimizations = {
-    minimize: isProd,
     runtimeChunk: 'single',
     splitChunks: {
       chunks: 'all',
@@ -254,77 +234,47 @@ module.exports = (env, argv) => {
         },
       },
     },
+    minimize: isProd,
+    minimizer: [
+      new TerserPlugin({
+        extractComments: isProd,
+        cache: !isProd,
+        sourceMap: !isProd,
+        terserOptions: {
+          ecma: undefined,
+          warnings: !isProd,
+          parse: {},
+          mangle: isProd, // Note `mangle.properties` is `false` by default.
+          module: false,
+          output: null,
+          toplevel: false,
+          nameCache: null,
+          ie8: false,
+          keep_classnames: undefined,
+          keep_fnames: false,
+          safari10: false,
+          compress: {
+            drop_console: true,
+          },
+          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+        },
+      }),
+    ],
   };
 
   const prodOptimizations = {
     ...commonOptimizations,
-    minimize: isProd,
-    minimizer: [
-      new TerserPlugin({
-        extractComments: isProd,
-        cache: !isProd,
-        sourceMap: !isProd,
-        terserOptions: {
-          ecma: undefined,
-          warnings: !isProd,
-          parse: {},
-          mangle: isProd, // Note `mangle.properties` is `false` by default.
-          module: false,
-          output: null,
-          toplevel: false,
-          nameCache: null,
-          ie8: false,
-          keep_classnames: undefined,
-          keep_fnames: false,
-          safari10: false,
-          compress: {
-            drop_console: true,
-          },
-          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
-        },
-      }),
-    ],
   };
 
   const devOptimizations = {
     ...commonOptimizations,
-    minimize: isProd,
-    minimizer: [
-      new TerserPlugin({
-        extractComments: isProd,
-        cache: !isProd,
-        sourceMap: !isProd,
-        terserOptions: {
-          ecma: undefined,
-          warnings: !isProd,
-          parse: {},
-          mangle: isProd, // Note `mangle.properties` is `false` by default.
-          module: false,
-          output: null,
-          toplevel: false,
-          nameCache: null,
-          ie8: false,
-          keep_classnames: undefined,
-          keep_fnames: false,
-          safari10: false,
-          compress: {
-            drop_console: true,
-          },
-          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
-        },
-      }),
-    ],
   };
 
-  const pluginList = isProd ? [...devPlugins, ...prodPlugins] : devPlugins;
+  const pluginList = isProd ? [...prodPlugins, ...devPlugins] : devPlugins;
   const optimizationList = isProd ? { ...prodOptimizations } : { ...devOptimizations };
 
   return {
-    // externals: [nodeExternals()],
-
-    // devtool: isProd ? '' : 'inline-source-map',
     devtool: isProd ? '' : 'inline-source-map',
-
     entry: {
       index: path.resolve(__dirname, './index.js'),
     },
@@ -364,11 +314,6 @@ module.exports = (env, argv) => {
             'sass-loader',
           ],
         },
-        // {
-        //   test: /\.(woff|woff2|eot|ttf|svg)$/,
-        //   loader: 'url-loader?limit=100000',
-        // },
-
         {
           test: /\.(png|jpg|gif|svg)$/,
           use: ['file-loader'],

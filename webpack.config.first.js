@@ -28,7 +28,8 @@ const htmlTemplate = isProduction => `
               <link rel="preconnect" href="https://maps.gstatic.com">
 
              <!-- <link href="${fontsCustom}" rel="stylesheet"> -->
-             <link href="fonts.css" rel="stylesheet">
+
+              <link href="fonts.css" rel="stylesheet">
               <link rel="canonical" href="${canonical}" />
               <link rel="apple-touch-icon" href="/icon_192x192.png">
 
@@ -77,56 +78,6 @@ module.exports = (env, argv) => {
     isProd = false;
   }
 
-  /**
-   * Plugins for production environment
-   */
-  // eslint-disable-next-line no-unused-vars
-  let prodPlugins = [];
-  // eslint-disable-next-line no-unused-vars
-
-  // if (!localProd) {
-  prodPlugins = [new CleanWebpackPlugin()];
-  // }
-
-  // eslint-disable-next-line no-unused-vars
-  const devPlugins = [
-    new CleanWebpackPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      'process.env.DEBUG': JSON.stringify(process.env.DEBUG),
-      __ENV__: JSON.stringify(process.env.NODE_ENV || 'development'),
-    }),
-    new GoogleFontsPlugin({
-      fonts: [
-        { family: 'Barlow Semi Condensed' },
-        { family: 'Nova Slim' },
-        { family: 'Rationale' },
-        { family: 'Satisfy' },
-        { family: 'KoHo', variants: ['400', '700italic'] },
-        { family: 'Kodchasan', variants: ['400', '500', '600'] },
-      ],
-      // apiUrl: 'https://google-webfonts-helper.herokuapp.com/api/fonts',
-      // https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed|KoHo|Kodchasan:400,500,600|Nova+Slim|Rationale|Satisfy&display=swap
-      /* ...options */
-    }),
-    new WebpackIndexHTMLPlugin({
-      minify: false,
-      template: () => htmlTemplate(isProd),
-    }),
-  ];
-
-  const commonOptimizations = {};
-
-  const prodOptimizations = {
-    ...commonOptimizations,
-  };
-
-  const devOptimizations = {
-    ...commonOptimizations,
-  };
-
-  const optimizationList = isProd ? { ...prodOptimizations } : { ...devOptimizations };
-
   return {
     // externals: [nodeExternals()],
 
@@ -162,9 +113,6 @@ module.exports = (env, argv) => {
           test: /\.svg$/,
           use: 'raw-loader',
         },
-
-        // { test: /\.(woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' },
-
         {
           test: /\.css|\.s(c|a)ss$/,
           use: [
@@ -186,26 +134,27 @@ module.exports = (env, argv) => {
       ],
     },
     plugins: [
-      // new CopyPlugin([{ from: 'app/', to: './' }]),
+      new CleanWebpackPlugin(),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        'process.env.DEBUG': JSON.stringify(process.env.DEBUG),
+        __ENV__: JSON.stringify(process.env.NODE_ENV || 'development'),
+      }),
+      new GoogleFontsPlugin({
+        fonts: [
+          { family: 'Barlow Semi Condensed' },
+          { family: 'Nova Slim' },
+          { family: 'Rationale' },
+          { family: 'Satisfy' },
+          { family: 'KoHo', variants: ['400', '700italic'] },
+          { family: 'Kodchasan', variants: ['400', '500', '600'] },
+        ],
+      }),
       new WebpackIndexHTMLPlugin({
-        minify: {
-          removeComments: isProd,
-          collapseWhitespace: isProd,
-          html5: true,
-          minifyCSS: false,
-          minifyJS: false,
-          minifyURLs: false,
-          removeAttributeQuotes: false,
-          removeEmptyAttributes: false,
-          removeOptionalTags: false,
-          removeRedundantAttributes: false,
-          removeScriptTypeAttributes: false,
-          removeStyleLinkTypeAttributese: false,
-          useShortDoctype: false,
-        },
+        minify: false,
         template: () => htmlTemplate(isProd),
       }),
     ],
-    optimization: optimizationList,
+    optimization: {},
   };
 };
