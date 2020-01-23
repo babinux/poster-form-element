@@ -144,9 +144,6 @@ module.exports = (env, argv) => {
 
           options: {
             cacheName: 'assets',
-            broadcastUpdate: {
-              channelName: 'my-update-channel',
-            },
           },
         },
       ],
