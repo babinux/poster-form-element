@@ -4,35 +4,6 @@
   publish = "dist" # create-react-app builds to this folder, Netlify should serve all these files statically
 
 [[headers]]
-  for = "*.js" # js files should be set this way
-  [headers.values]
-    Cache-Control = "public, max-age=1200"
-[[headers]]
-  for = "*.css" # css files too
-  [headers.values]
-    Cache-Control = "public, max-age=1200"
-[[headers]]
-  for = "*.png"
-  [headers.values]
-    Cache-Control = "public, max-age=1200"
-[[headers]]
-  for = "*.svg"
-  [headers.values]
-    Cache-Control = "public, max-age=1200"
-[[headers]]
-  for = "*.jpg"
-  [headers.values]
-    Cache-Control = "public, max-age=1200"
-[[headers]]
-  for = "*.jpeg"
-  [headers.values]
-    Cache-Control = "public, max-age=1200"
-[[headers]]
-  for = "*.ico"
-  [headers.values]
-    Cache-Control = "public, max-age=1200"
-
-[[headers]]
   for = "/*"
   [headers.values]
     Cache-Control = "public, max-age=1200"
