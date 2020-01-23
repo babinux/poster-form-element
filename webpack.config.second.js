@@ -94,6 +94,12 @@ module.exports = (env, argv) => {
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
       }
+
+      new PngToIco(path.resolve(__dirname, './app/assets/icons/favicon.png'))
+        .then(buf => {
+          fs.writeFileSync(path.resolve(__dirname, './dist/favicon.ico'), buf);
+        })
+        .catch(console.error);
     }),
   ];
   // }
@@ -296,12 +302,6 @@ module.exports = (env, argv) => {
 
   const pluginList = isProd ? [...devPlugins, ...prodPlugins] : devPlugins;
   const optimizationList = isProd ? { ...prodOptimizations } : { ...devOptimizations };
-
-  new PngToIco(path.resolve(__dirname, './app/assets/icons/favicon.png'))
-    .then(buf => {
-      fs.writeFileSync(path.resolve(__dirname, './dist/favicon.ico'), buf);
-    })
-    .catch(console.error);
 
   return {
     // externals: [nodeExternals()],
