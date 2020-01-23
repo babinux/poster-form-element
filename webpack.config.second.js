@@ -13,8 +13,7 @@ const WebpackPwaManifest = require('webpack-pwa-manifest');
 const CopyPlugin = require('copy-webpack-plugin');
 const GoogleFontsPlugin = require('@beyonk/google-fonts-webpack-plugin');
 const PostCompile = require('post-compile-webpack-plugin');
-const PngToIco = require('png-to-ico');
-const fs = require('fs-extra');
+
 // eslint-disable-next-line no-unused-vars
 const BrotliPlugin = require('brotli-webpack-plugin');
 
@@ -102,13 +101,12 @@ module.exports = (env, argv) => {
     new GoogleFontsPlugin({
       fonts: [{ family: 'Barlow Semi Condensed' }, { family: 'Satisfy' }],
     }),
-    new CopyPlugin([{ from: 'app/assets/icons/icon_192x192.png', to: './' }]),
+    new CopyPlugin([
+      { from: 'app/assets/icons/icon_192x192.png', to: './' },
+      { from: 'app/assets/icons/favicon.ico', to: './' },
+    ]),
     new PostCompile(() => {
-      new PngToIco(path.resolve(__dirname, './app/assets/icons/favicon.png'))
-        .then(buf => {
-          fs.writeFileSync(path.resolve(__dirname, './dist/favicon.ico'), buf);
-        })
-        .catch(console.error);
+      console.log('Compilation Done !!!!');
     }),
     new WebpackPwaManifest({
       name: `${appName}`,
@@ -143,7 +141,7 @@ module.exports = (env, argv) => {
       runtimeCaching: [
         {
           // Match any request that ends with .png, .jpg, .jpeg or .svg.
-          urlPattern: /\.(?:png|jpg|jpeg|svg)$/,
+          urlPattern: /\.(?:png|jpg|jpeg|svg|ico)$/,
 
           // Apply a cache-first strategy.
           handler: 'CacheFirst',
