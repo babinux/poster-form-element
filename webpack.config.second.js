@@ -114,7 +114,7 @@ module.exports = (env, argv) => {
         author: `${appAuthor}`,
         description: `${appDescription}`,
         viewport:
-          'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=yes, viewport-fit=cover',
+          'minimum-scale=1, initial-scale=1, shrink-to-fit=no, user-scalable=yes, viewport-fit=cover',
         'application-name': `${appName}`,
         'mobile-web-app-capable': 'yes',
         'theme-color': `${themeColor}`,
