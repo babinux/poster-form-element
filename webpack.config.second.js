@@ -278,8 +278,8 @@ module.exports = (env, argv) => {
     },
     output: {
       path: path.resolve(__dirname, './dist'),
-      filename: isProd ? '[name].js' : '[name].js',
-      chunkFilename: '[name].js',
+      filename: isProd ? '[name].[hash].js' : '[name].js',
+      chunkFilename: '[name].[hash].js',
       publicPath: path.resolve(__dirname, '/'),
     },
 
