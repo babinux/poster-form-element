@@ -10,6 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
+const CopyPlugin = require('copy-webpack-plugin');
 const PostCompile = require('post-compile-webpack-plugin');
 const PngToIco = require('png-to-ico');
 const fs = require('fs-extra');
@@ -71,14 +72,14 @@ module.exports = (env, argv) => {
     new CompressionPlugin({
       filename: '[path].br[query]',
       algorithm: 'gzip',
-      test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.svg?.+$/,
+      test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.png?.+$|\.jpg?.+$|\.ico?.+$|\.svg?.+$/,
       threshold: 10240,
       minRatio: 0.7,
     }),
     new CompressionPlugin({
       filename: '[path].br[query]',
       algorithm: 'brotliCompress',
-      test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.svg?.+$/,
+      test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.png?.+$|\.jpg?.+$|\.ico?.+$|\.svg?.+$/,
       compressionOptions: {
         level: 11,
       },
@@ -113,6 +114,7 @@ module.exports = (env, argv) => {
       'process.env.DEBUG': JSON.stringify(process.env.DEBUG),
       __ENV__: JSON.stringify(process.env.NODE_ENV || 'development'),
     }),
+    new CopyPlugin([{ from: 'app/assets/icons/icon_192x192.png', to: './' }]),
     new WebpackPwaManifest({
       name: `${appName}`,
       short_name: `${appName}`,
