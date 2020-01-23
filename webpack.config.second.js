@@ -2,13 +2,26 @@
 // eslint-disable-next-line one-var
 const path = require('path');
 const webpack = require('webpack');
+// eslint-disable-next-line no-unused-vars
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const PngToIco = require('png-to-ico');
 const fs = require('fs-extra');
+
+const dir = './dist';
+
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
+}
+
+// ===================================================
+// <> APP CONFIGS
+// ===================================================
 
 const domain = 'https://beta.punkpixel.io';
 
@@ -17,18 +30,21 @@ const appDescription = `Create, design personalized map of the solar system for 
 const appKeywords = `${appName} solar system, planets, poster, birthday, anniversary, earth`;
 const appAuthor = `Jerome Botcho`;
 
-const fontsCustom =
-  'https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed|KoHo|Kodchasan:400,500,600|Nova+Slim|Rationale|Satisfy&display=swap';
+// const fontsCustom =
+//   'https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed|KoHo|Kodchasan:400,500,600|Nova+Slim|Rationale|Satisfy&display=swap';
+
 const themeColor = '#317EFB';
 const tileColor = '#317EFB';
-
-const iconsLocationLocal = './app/assets/icons';
 const iconsLocation = '';
+
+// eslint-disable-next-line no-unused-vars
+const iconsLocationLocal = './app/assets/icons';
+// eslint-disable-next-line no-unused-vars
 const canonical = 'https://beta.punkpixel.io';
 
-console.log("path.resolve(__dirname, '/tmp')");
-
-console.log(path.resolve(__dirname, './index.js'));
+// ===================================================
+// </> APP CONFIGS
+// ===================================================
 
 module.exports = (env, argv) => {
   let isProd;
@@ -126,6 +142,12 @@ module.exports = (env, argv) => {
         'og:article:author': 'babinux',
       },
       // inlineSource: 'runtime~.+\\.js',
+    }),
+    new BundleAnalyzerPlugin(),
+    new WebpackBuildNotifierPlugin({
+      title: 'Starry App Build',
+      logo: path.resolve('./app/assets/icons/favicon.png'),
+      suppressSuccess: true,
     }),
   ];
 
