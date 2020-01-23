@@ -2,3 +2,18 @@
   # command = "node build" # the command you run to build this file
   functions = "dist/functions-lambda/" # netlify-lambda builds to this folder AND Netlify reads functions from here
   publish = "dist" # create-react-app builds to this folder, Netlify should serve all these files statically
+
+[[headers]]
+  for = "*.js" # js files should be set this way
+  [headers.values]
+    Cache-Control = "public, max-age=120"
+[[headers]]
+  for = "*.css" # css files too
+  [headers.values]
+    Cache-Control = "public, max-age=120"
+
+# Set enviroment variable prompts for templates
+[template.environment]
+  YOUR_ENV_KEYS_NEEDED = "Enter in the ENV key here"
+  # ref https://bit.ly/2wQ1mVk
+  incoming-hooks = ["Service-1"]

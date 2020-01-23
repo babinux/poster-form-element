@@ -26,7 +26,7 @@ const htmlTemplate = isProduction => `
 
               <link href="${fontsCustom}" rel="stylesheet">
               <link rel="canonical" href="${canonical}" />
-              <link rel="apple-touch-icon" href="app/assets/icons/icon_192x192.png">
+              <link rel="apple-touch-icon" href="assets/icons/icon_192x192.png">
 
               <title>${appName}</title>
               <meta charset="UTF-8">
