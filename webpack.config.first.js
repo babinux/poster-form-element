@@ -61,6 +61,7 @@ module.exports = (env, argv) => {
   process.env.NODE_ENV = argv.mode;
 
   // console.log(argv.local);
+  // eslint-disable-next-line no-unused-vars
   const localProd = argv.local;
 
   if (process.env.NODE_ENV === 'production') {
@@ -79,9 +80,9 @@ module.exports = (env, argv) => {
   let prodPlugins = [];
   // eslint-disable-next-line no-unused-vars
 
-  if (!localProd) {
-    prodPlugins = [];
-  }
+  // if (!localProd) {
+  prodPlugins = [new CleanWebpackPlugin()];
+  // }
 
   // eslint-disable-next-line no-unused-vars
   const devPlugins = [

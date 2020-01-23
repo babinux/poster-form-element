@@ -71,14 +71,14 @@ module.exports = (env, argv) => {
     new CompressionPlugin({
       filename: '[path].br[query]',
       algorithm: 'gzip',
-      test: /\.(js|css|html|svg|png|jpg)$/,
+      test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.svg?.+$/,
       threshold: 10240,
       minRatio: 0.7,
     }),
     new CompressionPlugin({
       filename: '[path].br[query]',
       algorithm: 'brotliCompress',
-      test: /\.(js|css|html|svg|png|jpg)$/,
+      test: /\.js$|\.css$|\.html$|\.eot?.+$|\.ttf?.+$|\.woff?.+$|\.svg?.+$/,
       compressionOptions: {
         level: 11,
       },
