@@ -11,6 +11,7 @@ const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const CopyPlugin = require('copy-webpack-plugin');
+const GoogleFontsPlugin = require('@beyonk/google-fonts-webpack-plugin');
 const PostCompile = require('post-compile-webpack-plugin');
 const PngToIco = require('png-to-ico');
 const fs = require('fs-extra');
@@ -115,6 +116,19 @@ module.exports = (env, argv) => {
       __ENV__: JSON.stringify(process.env.NODE_ENV || 'development'),
     }),
     new CopyPlugin([{ from: 'app/assets/icons/icon_192x192.png', to: './' }]),
+    new GoogleFontsPlugin({
+      fonts: [
+        { family: 'Barlow Semi Condensed' },
+        // { family: 'Nova Slim' },
+        // { family: 'Rationale' },
+        { family: 'Satisfy' },
+        // { family: 'KoHo', variants: ['400', '700italic'] },
+        // { family: 'Kodchasan', variants: ['400', '500', '600'] },
+      ],
+      apiUrl: 'https://google-webfonts-helper.herokuapp.com/api/fonts',
+      // https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed|KoHo|Kodchasan:400,500,600|Nova+Slim|Rationale|Satisfy&display=swap
+      /* ...options */
+    }),
     new WebpackPwaManifest({
       name: `${appName}`,
       short_name: `${appName}`,
@@ -350,6 +364,10 @@ module.exports = (env, argv) => {
             'sass-loader',
           ],
         },
+        // {
+        //   test: /\.(woff|woff2|eot|ttf|svg)$/,
+        //   loader: 'url-loader?limit=100000',
+        // },
 
         {
           test: /\.(png|jpg|gif|svg)$/,

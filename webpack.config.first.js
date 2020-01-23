@@ -6,6 +6,7 @@ const WebpackIndexHTMLPlugin = require('@open-wc/webpack-index-html-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // eslint-disable-next-line no-unused-vars
 const CopyPlugin = require('copy-webpack-plugin');
+const GoogleFontsPlugin = require('@beyonk/google-fonts-webpack-plugin');
 
 // const createDefaultConfig = require('@open-wc/building-webpack');
 
@@ -27,7 +28,8 @@ const htmlTemplate = isProduction => `
               <link rel="preload" href="https://maps.gstatic.com">
               <link rel="preload" href="https://storage.googleapis.com">
 
-              <link href="${fontsCustom}" rel="stylesheet">
+             <!-- <link href="${fontsCustom}" rel="stylesheet"> -->
+             <link href="fonts.css" rel="stylesheet">
               <link rel="canonical" href="${canonical}" />
               <link rel="apple-touch-icon" href="/icon_192x192.png">
 
@@ -95,6 +97,19 @@ module.exports = (env, argv) => {
       'process.env.DEBUG': JSON.stringify(process.env.DEBUG),
       __ENV__: JSON.stringify(process.env.NODE_ENV || 'development'),
     }),
+    new GoogleFontsPlugin({
+      fonts: [
+        { family: 'Barlow Semi Condensed' },
+        { family: 'Nova Slim' },
+        { family: 'Rationale' },
+        { family: 'Satisfy' },
+        { family: 'KoHo', variants: ['400', '700italic'] },
+        { family: 'Kodchasan', variants: ['400', '500', '600'] },
+      ],
+      // apiUrl: 'https://google-webfonts-helper.herokuapp.com/api/fonts',
+      // https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed|KoHo|Kodchasan:400,500,600|Nova+Slim|Rationale|Satisfy&display=swap
+      /* ...options */
+    }),
     new WebpackIndexHTMLPlugin({
       minify: false,
       template: () => htmlTemplate(isProd),
@@ -148,6 +163,9 @@ module.exports = (env, argv) => {
           test: /\.svg$/,
           use: 'raw-loader',
         },
+
+        // { test: /\.(woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' },
+
         {
           test: /\.css|\.s(c|a)ss$/,
           use: [
