@@ -138,9 +138,12 @@ module.exports = (env, argv) => {
       runtimeCaching: [
         {
           // urlPattern: '*',
-          urlPattern: /.*$/,
+          // urlPattern: /.*$/,
+          urlPattern: /\.(?:png|jpg|jpeg|svg|ico|html)$/,
 
           handler: 'CacheFirst',
+          // urlPattern: '/*',
+          // handler: 'networkFirst',
 
           options: {
             cacheName: 'assets',
@@ -273,8 +276,8 @@ module.exports = (env, argv) => {
     },
     output: {
       path: path.resolve(__dirname, './dist'),
-      filename: isProd ? '[name].[hash].js' : '[name].js',
-      chunkFilename: '[name].[hash].js',
+      filename: isProd ? '[name].js' : '[name].js',
+      chunkFilename: '[name].js',
       publicPath: path.resolve(__dirname, '/'),
     },
 
