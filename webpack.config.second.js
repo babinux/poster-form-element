@@ -57,6 +57,7 @@ module.exports = (env, argv) => {
   process.env.NODE_ENV = argv.mode;
 
   // console.log(argv.local);
+  // eslint-disable-next-line no-unused-vars
   const localProd = argv.local;
 
   if (process.env.NODE_ENV === 'production') {
@@ -68,24 +69,31 @@ module.exports = (env, argv) => {
     isProd = false;
   }
 
-  let prodPlugins = [];
+  // let prodPlugins = [];
 
-  if (!localProd) {
-    prodPlugins = [
-      //   new CleanWebpackPlugin(),
-      new CompressionPlugin({
-        filename: '[path].br[query]',
-        algorithm: 'brotliCompress',
-        test: /\.(js|css|html|svg)$/,
-        compressionOptions: {
-          level: 11,
-        },
-        threshold: 10240,
-        minRatio: 0.8,
-        // deleteOriginalAssets: false ? isProd : !isProd,
-      }),
-    ];
-  }
+  // if (!localProd) {
+  const prodPlugins = [
+    //   new CleanWebpackPlugin(),
+    // new CompressionPlugin({
+    //   asset: `[path].gz[query]`,
+    //   algorithm: `gzip`,
+    //   test: /\.js$|\.css$|\.html$/,
+    //   threshold: 10240,
+    //   minRatio: 0.7,
+    // }),
+    new CompressionPlugin({
+      filename: '[path].br[query]',
+      algorithm: 'brotliCompress',
+      test: /\.(js|css|html|svg)$/,
+      compressionOptions: {
+        level: 11,
+      },
+      threshold: 10240,
+      minRatio: 0.8,
+      // deleteOriginalAssets: false ? isProd : !isProd,
+    }),
+  ];
+  // }
 
   /**
    * Plugins for dev environment
