@@ -6,11 +6,11 @@
 [[headers]]
   for = "*.js" # js files should be set this way
   [headers.values]
-    Cache-Control = "public, max-age=120"
+    Cache-Control = "public, max-age=1200"
 [[headers]]
   for = "*.css" # css files too
   [headers.values]
-    Cache-Control = "public, max-age=120"
+    Cache-Control = "public, max-age=1200"
 
 # Set enviroment variable prompts for templates
 [template.environment]
