@@ -4,6 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 const WebpackIndexHTMLPlugin = require('@open-wc/webpack-index-html-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+// eslint-disable-next-line no-unused-vars
 const CopyPlugin = require('copy-webpack-plugin');
 
 // const createDefaultConfig = require('@open-wc/building-webpack');
@@ -20,7 +21,7 @@ const htmlTemplate = isProduction => `
         <!DOCTYPE html>
           <html lang="en">
             <head>
-              <link href="${fontsCustom}" rel="stylesheet">
+           <!--   <link href="${fontsCustom}" rel="stylesheet"> -->
               <link rel="canonical" href="${canonical}" />
 
               <title>${appName}</title>
@@ -56,6 +57,7 @@ module.exports = (env, argv) => {
   /**
    * Plugins for production environment
    */
+  // eslint-disable-next-line no-unused-vars
   let prodPlugins = [];
   // eslint-disable-next-line no-unused-vars
 
@@ -63,6 +65,7 @@ module.exports = (env, argv) => {
     prodPlugins = [];
   }
 
+  // eslint-disable-next-line no-unused-vars
   const devPlugins = [
     new CleanWebpackPlugin(),
     new webpack.DefinePlugin({

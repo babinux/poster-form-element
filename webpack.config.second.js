@@ -8,6 +8,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
+// eslint-disable-next-line no-unused-vars
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const PngToIco = require('png-to-ico');
@@ -143,7 +144,7 @@ module.exports = (env, argv) => {
       },
       // inlineSource: 'runtime~.+\\.js',
     }),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
     new WebpackBuildNotifierPlugin({
       title: 'Starry App Build',
       logo: path.resolve('./app/assets/icons/favicon.png'),
@@ -176,12 +177,28 @@ module.exports = (env, argv) => {
 
   const prodOptimizations = {
     ...commonOptimizations,
+    minimize: isProd,
     minimizer: [
       new TerserPlugin({
-        extractComments: 'all',
+        extractComments: isProd,
         cache: !isProd,
         sourceMap: !isProd,
         terserOptions: {
+          ecma: undefined,
+          warnings: !isProd,
+          parse: {},
+          mangle: isProd, // Note `mangle.properties` is `false` by default.
+          module: false,
+          output: null,
+          toplevel: false,
+          nameCache: null,
+          ie8: false,
+          keep_classnames: undefined,
+          keep_fnames: false,
+          safari10: false,
+          compress: {
+            drop_console: true,
+          },
           // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
         },
       }),
@@ -190,12 +207,28 @@ module.exports = (env, argv) => {
 
   const devOptimizations = {
     ...commonOptimizations,
+    minimize: isProd,
     minimizer: [
       new TerserPlugin({
-        extractComments: !isProd,
+        extractComments: isProd,
         cache: !isProd,
-        sourceMap: isProd,
+        sourceMap: !isProd,
         terserOptions: {
+          ecma: undefined,
+          warnings: !isProd,
+          parse: {},
+          mangle: isProd, // Note `mangle.properties` is `false` by default.
+          module: false,
+          output: null,
+          toplevel: false,
+          nameCache: null,
+          ie8: false,
+          keep_classnames: undefined,
+          keep_fnames: false,
+          safari10: false,
+          compress: {
+            drop_console: true,
+          },
           // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
         },
       }),
