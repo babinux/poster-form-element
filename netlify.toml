@@ -11,6 +11,28 @@
   for = "*.css" # css files too
   [headers.values]
     Cache-Control = "public, max-age=1200"
+[[headers]]
+  for = "*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=1200"
+[[headers]]
+  for = "*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=1200"
+[[headers]]
+  for = "*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=1200"
+[[headers]]
+  for = "*.jpeg"
+  [headers.values]
+    Cache-Control = "public, max-age=1200"
+[[headers]]
+  for = "*.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=1200"
+
+
 
 # Set enviroment variable prompts for templates
 [template.environment]
