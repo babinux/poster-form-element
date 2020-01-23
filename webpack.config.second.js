@@ -10,18 +10,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
-
-// eslint-disable-next-line no-unused-vars
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-
+const PostCompile = require('post-compile-webpack-plugin');
 const PngToIco = require('png-to-ico');
 const fs = require('fs-extra');
 
-const dir = './dist';
-
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir);
-}
+// eslint-disable-next-line no-unused-vars
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 // ===================================================
 // <> APP CONFIGS
@@ -73,24 +67,33 @@ module.exports = (env, argv) => {
 
   // if (!localProd) {
   const prodPlugins = [
-    //   new CleanWebpackPlugin(),
+    new CleanWebpackPlugin(),
     new CompressionPlugin({
       filename: '[path].br[query]',
       algorithm: 'gzip',
-      test: /\.(js|css|html|svg)$/,
+      test: /\.(js|css|html|svg|png|jpg)$/,
       threshold: 10240,
       minRatio: 0.7,
     }),
     new CompressionPlugin({
       filename: '[path].br[query]',
       algorithm: 'brotliCompress',
-      test: /\.(js|css|html|svg)$/,
+      test: /\.(js|css|html|svg|png|jpg)$/,
       compressionOptions: {
         level: 11,
       },
       threshold: 10240,
       minRatio: 0.8,
       // deleteOriginalAssets: false ? isProd : !isProd,
+    }),
+    new PostCompile(() => {
+      console.log('Adding Fav Icon');
+
+      const dir = './dist';
+
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
     }),
   ];
   // }
