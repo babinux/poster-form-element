@@ -8,6 +8,9 @@ const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
+const WorkboxPlugin = require('workbox-webpack-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
+
 // eslint-disable-next-line no-unused-vars
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
@@ -92,6 +95,51 @@ module.exports = (env, argv) => {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'process.env.DEBUG': JSON.stringify(process.env.DEBUG),
       __ENV__: JSON.stringify(process.env.NODE_ENV || 'development'),
+    }),
+    new WebpackPwaManifest({
+      name: `${appName}`,
+      short_name: `${appName}`,
+      description: `${appDescription}`,
+      background_color: `${themeColor}`,
+      theme_color: `${themeColor}`,
+      crossorigin: 'use-credentials', // can be null, use-credentials or anonymous
+      start_url: '/?source=pwa',
+      display: 'standalone',
+      scope: '/',
+      icons: [
+        {
+          src: path.resolve(`${iconsLocationLocal}/Logo Black Large.png`),
+          sizes: [96, 128, 192, 256, 384, 512], // multiple sizes
+        },
+        {
+          src: path.resolve(`${iconsLocationLocal}/Logo Black Large.png`),
+          size: '1024x1024', // you can also use the specifications pattern
+        },
+      ],
+    }),
+    new WorkboxPlugin.GenerateSW({
+      swDest: 'service-worker.js',
+      importWorkboxFrom: 'cdn',
+      cleanupOutdatedCaches: true,
+
+      // Do not precache images
+      // exclude: [/\.(?:png|jpg|jpeg|svg)$/],
+
+      // Define runtime caching rules.
+      runtimeCaching: [
+        {
+          // Match any request that ends with .png, .jpg, .jpeg or .svg.
+          urlPattern: /\.(?:png|jpg|jpeg|svg)$/,
+
+          // Apply a cache-first strategy.
+          handler: 'CacheFirst',
+
+          options: {
+            // Use a custom cache name.
+            cacheName: 'images',
+          },
+        },
+      ],
     }),
     new HtmlWebpackPlugin({
       template: './tmp/index.html',

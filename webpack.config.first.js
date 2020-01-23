@@ -21,8 +21,9 @@ const htmlTemplate = isProduction => `
         <!DOCTYPE html>
           <html lang="en">
             <head>
-           <!--   <link href="${fontsCustom}" rel="stylesheet"> -->
+              <link href="${fontsCustom}" rel="stylesheet">
               <link rel="canonical" href="${canonical}" />
+              <link rel="apple-touch-icon" href="/icon_192x192.b85f732afd047b469bc878c77e2503af.png">
 
               <title>${appName}</title>
               <meta charset="UTF-8">
@@ -31,6 +32,20 @@ const htmlTemplate = isProduction => `
             <body>
               <poster-form-element></poster-form-element>
               <noscript>Your browser does not support JavaScript!</noscript>
+
+              <script>
+                if ('serviceWorker' in navigator) {
+                  window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                      // Registration was successful
+                      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+
+                    }, function(err) {
+                      // registration failed :(
+                      console.log('ServiceWorker registration failed: ', err);
+                    });
+                  });
+                }</script>
 
             </body>
           </html>
