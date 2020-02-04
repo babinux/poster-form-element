@@ -10,7 +10,7 @@ const WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 
 const WriteFilePlugin = require('write-file-webpack-plugin');
 
-const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InlineSourcePlugin = require('html-webpack-inline-source-plugin');
@@ -167,6 +167,19 @@ const htmlTemplate = isProduction => `
                 }</script>
 
                 <script src=vendors~index.js></script>
+
+                <button class="snipcart-add-item"
+                  data-item-id="starry-night"
+                  data-item-price="79.99"
+                  data-item-url="/paintings/starry-night"
+                  data-item-description="High-quality replica of The Starry Night by the Dutch post-impressionist painter Vincent van Gogh."
+                  data-item-image="/assets/images/starry-night.jpg"
+                  data-item-name="The Starry Night">
+                  Add to cart
+                </button>
+                <div hidden id="snipcart" data-api-key="OGQ3MDU2YjEtZDBkYS00NTc4LTlmYjItYWRlNWYzY2Q1NDhiNjM2ODk1MDk0MTQ2OTE0NTY4
+"></div>
+                <script src="https://cdn.snipcart.com/themes/v3.0.6/default/snipcart.js"></script>
 
             </body>
           </html>

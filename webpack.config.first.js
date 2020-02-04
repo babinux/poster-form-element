@@ -24,6 +24,7 @@ const htmlTemplate = isProduction => `
             <head>
               <script>LUX=(function(){var a=("undefined"!==typeof(LUX)&&"undefined"!==typeof(LUX.gaMarks)?LUX.gaMarks:[]);var d=("undefined"!==typeof(LUX)&&"undefined"!==typeof(LUX.gaMeasures)?LUX.gaMeasures:[]);var j="LUX_start";var k=window.performance;var l=("undefined"!==typeof(LUX)&&LUX.ns?LUX.ns:(Date.now?Date.now():+(new Date())));if(k&&k.timing&&k.timing.navigationStart){l=k.timing.navigationStart}function f(){if(k&&k.now){return k.now()}var o=Date.now?Date.now():+(new Date());return o-l}function b(n){if(k){if(k.mark){return k.mark(n)}else{if(k.webkitMark){return k.webkitMark(n)}}}a.push({name:n,entryType:"mark",startTime:f(),duration:0});return}function m(p,t,n){if("undefined"===typeof(t)&&h(j)){t=j}if(k){if(k.measure){if(t){if(n){return k.measure(p,t,n)}else{return k.measure(p,t)}}else{return k.measure(p)}}else{if(k.webkitMeasure){return k.webkitMeasure(p,t,n)}}}var r=0,o=f();if(t){var s=h(t);if(s){r=s.startTime}else{if(k&&k.timing&&k.timing[t]){r=k.timing[t]-k.timing.navigationStart}else{return}}}if(n){var q=h(n);if(q){o=q.startTime}else{if(k&&k.timing&&k.timing[n]){o=k.timing[n]-k.timing.navigationStart}else{return}}}d.push({name:p,entryType:"measure",startTime:r,duration:(o-r)});return}function h(n){return c(n,g())}function c(p,o){for(i=o.length-1;i>=0;i--){var n=o[i];if(p===n.name){return n}}return undefined}function g(){if(k){if(k.getEntriesByType){return k.getEntriesByType("mark")}else{if(k.webkitGetEntriesByType){return k.webkitGetEntriesByType("mark")}}}return a}return{mark:b,measure:m,gaMarks:a,gaMeasures:d}})();LUX.ns=(Date.now?Date.now():+(new Date()));LUX.ac=[];LUX.cmd=function(a){LUX.ac.push(a)};LUX.init=function(){LUX.cmd(["init"])};LUX.send=function(){LUX.cmd(["send"])};LUX.addData=function(a,b){LUX.cmd(["addData",a,b])};LUX_ae=[];window.addEventListener("error",function(a){LUX_ae.push(a)});LUX_al=[];if("function"===typeof(PerformanceObserver)&&"function"===typeof(PerformanceLongTaskTiming)){var LongTaskObserver=new PerformanceObserver(function(c){var b=c.getEntries();for(var a=0;a<b.length;a++){var d=b[a];LUX_al.push(d)}});try{LongTaskObserver.observe({type:["longtask"]})}catch(e){}};</script>
               <script src="https://cdn.speedcurve.com/js/lux.js?id=474866225" async defer crossorigin="anonymous"></script>
+              <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.0.6/default/snipcart.css" />
 
               <link rel="preconnect" href="https://maps.gstatic.com">
 
@@ -43,7 +44,7 @@ const htmlTemplate = isProduction => `
 
               <script>
                 if ('serviceWorker' in navigator) {
-                  window.addEventListener('load', function() {
+                  window.addEventListener('load', () => {
                     navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
                       // Registration was successful
                       console.log('ServiceWorker registration successful with scope: ', registration.scope);
@@ -54,6 +55,22 @@ const htmlTemplate = isProduction => `
                     });
                   });
                 }</script>
+
+
+              <button class="snipcart-add-item"
+                data-item-id="starry-night"
+                data-item-price="79.99"
+                data-item-url='/'
+                data-item-description="High-quality replica of The Starry Night by the Dutch post-impressionist painter Vincent van Gogh."
+                data-item-image="/assets/images/starry-night.jpg"
+                data-item-name="The Starry Night">
+                Add to cart
+              </button>
+
+                <div hidden id="snipcart" data-api-key="YTE3ODdmZTMtNzQ3Ny00ODdmLTg1NzctNmY1YmUwMTBiYTI3NjM2ODk1MDk0MTQ2OTE0NTY4"></div>
+
+
+                <script src="https://cdn.snipcart.com/themes/v3.0.6/default/snipcart.js"></script>
 
             </body>
           </html>

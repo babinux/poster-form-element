@@ -151,7 +151,187 @@ export class PosterFormElement extends LitElement {
     alert('asdasd');
   }
 
+  buildButton() {
+    this.buttonShopify = html`
+      <div id="product-component-1579841450878"></div>
+    `;
+    this.scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+    if (window.ShopifyBuy) {
+      if (window.ShopifyBuy.UI) {
+        this.ShopifyBuyInit();
+      } else {
+        this.loadScript();
+      }
+    } else {
+      this.loadScript();
+    }
+  }
+
+  loadScript() {
+    this.script = document.createElement('script');
+    this.script.async = true;
+    this.script.src = this.scriptURL;
+    (
+      document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]
+    ).appendChild(this.script);
+    this.script.onload = this.ShopifyBuyInit;
+  }
+
+  ShopifyBuyInit() {
+    const client = ShopifyBuy.buildClient({
+      domain: 'starry-app.myshopify.com',
+      storefrontAccessToken: '18b9925870b8277b37c110870b9fee4f',
+    });
+    ShopifyBuy.UI.onReady(client).then((ui) => {
+      ui.createComponent('product', {
+        id: '4474236043308',
+        node: document.getElementById('product-component-1579841450878'),
+        moneyFormat: '%24%7B%7Bamount%7D%7D',
+        options: {
+          product: {
+            styles: {
+              product: {
+                '@media (min-width: 601px)': {
+                  'max-width': 'calc(25% - 20px)',
+                  'margin-left': '20px',
+                  'margin-bottom': '50px',
+                },
+              },
+              button: {
+                'font-family': 'Roboto, sans-serif',
+                'font-size': '17px',
+                'padding-top': '16.5px',
+                'padding-bottom': '16.5px',
+                ':hover': {
+                  'background-color': '#3c9ddd',
+                },
+                'background-color': '#43aef5',
+                ':focus': {
+                  'background-color': '#3c9ddd',
+                },
+              },
+              quantityInput: {
+                'font-size': '17px',
+                'padding-top': '16.5px',
+                'padding-bottom': '16.5px',
+              },
+            },
+            buttonDestination: 'checkout',
+            contents: {
+              img: false,
+              title: false,
+              price: false,
+            },
+            text: {
+              button: 'Buy now',
+            },
+            googleFonts: ['Roboto'],
+          },
+          productSet: {
+            styles: {
+              products: {
+                '@media (min-width: 601px)': {
+                  'margin-left': '-20px',
+                },
+              },
+            },
+          },
+          modalProduct: {
+            contents: {
+              img: false,
+              imgWithCarousel: true,
+              button: false,
+              buttonWithQuantity: true,
+            },
+            styles: {
+              product: {
+                '@media (min-width: 601px)': {
+                  'max-width': '100%',
+                  'margin-left': '0px',
+                  'margin-bottom': '0px',
+                },
+              },
+              button: {
+                'font-family': 'Roboto, sans-serif',
+                'font-size': '17px',
+                'padding-top': '16.5px',
+                'padding-bottom': '16.5px',
+                ':hover': {
+                  'background-color': '#3c9ddd',
+                },
+                'background-color': '#43aef5',
+                ':focus': {
+                  'background-color': '#3c9ddd',
+                },
+              },
+              quantityInput: {
+                'font-size': '17px',
+                'padding-top': '16.5px',
+                'padding-bottom': '16.5px',
+              },
+            },
+            googleFonts: ['Roboto'],
+            text: {
+              button: 'Add to cart',
+            },
+          },
+          cart: {
+            styles: {
+              button: {
+                'font-family': 'Roboto, sans-serif',
+                'font-size': '17px',
+                'padding-top': '16.5px',
+                'padding-bottom': '16.5px',
+                ':hover': {
+                  'background-color': '#3c9ddd',
+                },
+                'background-color': '#43aef5',
+                ':focus': {
+                  'background-color': '#3c9ddd',
+                },
+              },
+            },
+            text: {
+              total: 'Subtotal',
+              button: 'Checkout',
+            },
+            googleFonts: ['Roboto'],
+          },
+          toggle: {
+            styles: {
+              toggle: {
+                'font-family': 'Roboto, sans-serif',
+                'background-color': '#43aef5',
+                ':hover': {
+                  'background-color': '#3c9ddd',
+                },
+                ':focus': {
+                  'background-color': '#3c9ddd',
+                },
+              },
+              count: {
+                'font-size': '17px',
+              },
+            },
+            googleFonts: ['Roboto'],
+          },
+        },
+      });
+    });
+  }
+
   firstUpdated() {
+    this.buildButton();
+
+    document.addEventListener('snipcart.ready', () => {
+      // You can safely use window.Snipcart here
+      // alert('asdasd');
+      console.log('Snipcart init');
+      console.log(window.Snipcart.store.getState());
+
+      window.Snipcart.store.getState();
+      // Snipcart.events.on(...);
+    });
     // this.googleMapDom = this.shadowRoot.querySelector('#map');
     this.googleMapDomInput = this.shadowRoot.querySelector('#map-input');
 
@@ -300,6 +480,8 @@ export class PosterFormElement extends LitElement {
               </vaadin-radio-group>
 
 
+
+
             </div>
 
             <div class="info-design-container">
@@ -400,6 +582,20 @@ export class PosterFormElement extends LitElement {
                 )}
 
               </vaadin-radio-group>
+
+
+               <button class="snipcart-add-item"
+                data-item-id="starry-night"
+                data-item-price="79.99"
+                data-item-url='${this.url}'
+                data-item-description="High-quality replica of The Starry Night by the Dutch post-impressionist painter Vincent van Gogh."
+                data-item-image="/assets/images/starry-night.jpg"
+                data-item-name="The Starry Night">
+                Add to cart
+              </button>
+
+
+
             </div>
           </div>
         </div>
